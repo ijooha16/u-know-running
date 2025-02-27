@@ -1,4 +1,5 @@
 import cafeImage from '../assets/images/home-pg-img.jpg'; // 이미지 파일을 import
+import Map from '../components/common/Map';
 
 const Home = () => {
   return (
@@ -9,7 +10,7 @@ const Home = () => {
       </div>
       <div className="w-2/5 min-h-screen relative">
         <div className="w-[20vw] min-w-[15vw] h-[75vh] rounded-3xl z-0 absolute left-16 top-16 overflow-hidden drop-shadow-lg">
-          <img src="" alt="지도 이미지" className="bg-gray-400 w-full h-full"/>
+          <Map />
         </div>
         <div className="w-[20vw] min-w-[15vw]  h-[75vh] rounded-3xl z-10 absolute left-56 top-28 overflow-hidden drop-shadow-lg">
           <img src={cafeImage} alt="카페 이미지" className="w-full h-full"/>

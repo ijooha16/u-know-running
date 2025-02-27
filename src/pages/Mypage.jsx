@@ -30,20 +30,24 @@ const Mypage = () => {
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
           <form>
-            <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
-              {/* 프로필 이미지가 없으면 디폴트 이미지 표시 현재는 디폴트값 없음  */}
-              <img src={profileImg} alt="" className="w-full h-full object-cover" />
+            <div className="border p-4 rounded-lg mb-4">
+              <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
+                {/* 프로필 이미지가 없으면 디폴트 이미지 표시 현재는 디폴트값 없음  */}
+                <img src={profileImg} alt="" className="w-full h-full object-cover" />
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleProfileImgChange} // 이미지 선택 시 실행
+                className={`w-full p-2 border ${isEdit ? "block" : "hidden"}`}
+              />
+              <input type="text" placeholder="이름" className="border p-2 w-full mb-4 mt-4" disabled={!isEdit} />
             </div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleProfileImgChange} // 이미지 선택 시 실행
-              className={`w-full p-2 border ${isEdit ? "block" : "hidden"}`}
-            />
-            <input type="text" placeholder="이름" className="border p-2 w-full mb-4 mt-4" disabled={!isEdit} />
-            <input type="text" placeholder="MBTI" className="border p-2 w-full mb-4" disabled={!isEdit} />
-            <input type="text" placeholder="Gender" className="border p-2 w-full mb-4" disabled={!isEdit} />
-            <input type="email" placeholder="test@google.com" className="border p-2 w-full mb-4" disabled={!isEdit} />
+            <div className="border p-4 rounded-lg mb-4">
+              <input type="text" placeholder="MBTI" className="border p-2 w-full mb-4" disabled={!isEdit} />
+              <input type="text" placeholder="Gender" className="border p-2 w-full mb-4" disabled={!isEdit} />
+              <input type="email" placeholder="test@google.com" className="border p-2 w-full mb-4" disabled={!isEdit} />
+            </div>
             <button type="button" onClick={toggleEdit} className="bg-blue-500 text-white p-2 w-full">
               {isEdit ? "수정 완료" : "수정하기"}
             </button>

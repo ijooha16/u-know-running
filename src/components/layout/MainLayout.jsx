@@ -26,10 +26,6 @@ const Layout = () => {
         </main>
         <Footer />
       </div>
-      {/* 이거 Home.jsx로 가져가기 */}
-      <Link to="/cafe-list">
-        <Button icon="hamburger_white" text="목록으로 보기" className="fixed bottom-[40px] right-[40px]" />
-      </Link>
     </>
   );
 };

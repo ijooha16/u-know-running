@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Input from "../components/common/Input";
+import Button from "../components/common/Button";
+import ContentBox from "../components/common/ContentBox";
 
 const Mypage = () => {
   // 프로필 이미지 상태
@@ -30,33 +33,31 @@ const Mypage = () => {
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
           <form>
-            <div className="border p-4 rounded-lg mb-4">
+            <ContentBox className="mb-4">
               <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
                 {/* 프로필 이미지가 없으면 디폴트 이미지 표시 현재는 디폴트값 없음  */}
                 <img src={profileImg} alt="" className="w-full h-full object-cover" />
               </div>
-              <input
+              <Input
                 type="file"
                 accept="image/*"
                 onChange={handleProfileImgChange} // 이미지 선택 시 실행
-                className={`w-full p-2 border ${isEdit ? "block" : "hidden"}`}
+                className={`${isEdit ? "block" : "hidden"}`}
               />
-              <input type="text" placeholder="이름" className="border p-2 w-full mb-4 mt-4" disabled={!isEdit} />
-            </div>
-            <div className="border p-4 rounded-lg mb-4">
-              <input type="text" placeholder="MBTI" className="border p-2 w-full mb-4" disabled={!isEdit} />
-              <input type="text" placeholder="Gender" className="border p-2 w-full mb-4" disabled={!isEdit} />
-              <input type="email" placeholder="test@google.com" className="border p-2 w-full mb-4" disabled={!isEdit} />
-            </div>
-            <button type="button" onClick={toggleEdit} className="bg-blue-500 text-white p-2 w-full">
-              {isEdit ? "수정 완료" : "수정하기"}
-            </button>
+              <Input type="text" placeholder="이름" className="border mb-4 mt-4" disabled={!isEdit} />
+            </ContentBox>
+            <ContentBox className="border p-4 rounded-lg mb-4">
+              <Input type="text" placeholder="MBTI" className="border  mb-4" disabled={!isEdit} />
+              <Input type="text" placeholder="Gender" className="border  mb-4" disabled={!isEdit} />
+              <Input type="email" placeholder="test@google.com" className="border mb-4" disabled={!isEdit} />
+            </ContentBox>
+            <Button type="Button" onClick={toggleEdit} text={isEdit ? "수정 완료" : "수정하기"}></Button>
           </form>
         </div>
       </div>
 
       {/* 오른쪽 영역: 북마크된 콘텐츠, 조건부 랜더링 예정 */}
-      <div className="w-2/3">
+      <ContentBox className="ml-[150px] gap-4">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-bold mb-4">북마크한 콘텐츠</h2>
           {/* 한 줄에 3개씩 (grid 사용) */}
@@ -81,7 +82,7 @@ const Mypage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </ContentBox>
     </div>
   );
 };

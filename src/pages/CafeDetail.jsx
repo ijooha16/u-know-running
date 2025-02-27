@@ -4,12 +4,19 @@ import MainTag from "../components/common/MainTag";
 import Tag from "../components/common/Tag";
 import ContentLayout from "../components/layout/ContentLayout";
 import Modal from "../components/Modal";
+import useLocationStore from "../stores/useLocationStore";
 
 const CafeDetail = () => {
-  // const {img, name, address, phone, businessHours, menu, tags} = data;
+  const { selectedCafe, setSelectedCafe } = useLocationStore();
+  const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+
+  if (!selectedCafe) return null;
 
   return (
-    <div className="fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]">
+    <div
+      onClick={() => setSelectedCafe(null)}
+      className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
+    >
       <ContentLayout>
         <Modal>
           <div className="flex gap-[30px">
@@ -21,15 +28,18 @@ const CafeDetail = () => {
                     <MainTag tagText="혼자 공부하기 좋은" />
                     <Icon icon="bookMark" />
                   </div>
-                  <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">Cafe Name</div>
-                  <div className="text-darkgray text-[14px] pl-[12px]">뫄뫄시 뫄뫄동 뫄뫄뫄 뫄뫄-뫄뫄길</div>
+                  <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
+                  <div className="text-darkgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
+                  <div className="text-darkgray text-[14px] pl-[12px]">{phone}</div>
                 </div>
                 <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
                   <Tag tagText="혼자 공부하기 좋은" />
                   <Tag tagText="혼자 공부하기 좋은" />
                   <Tag tagText="혼자 공부하기 좋은" />
                 </div>
-                <div className="w-full flex flex-end"></div> <Button text="웹사이트 바로가기" />
+                <a href={place_url} target="_blank" rel="noopener noreferrer">
+                  <Button text="웹사이트 바로가기" />
+                </a>
               </div>
             </div>
           </div>

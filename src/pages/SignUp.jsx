@@ -1,5 +1,8 @@
 import { useState } from "react";
 import supabase from "../services/supabase";
+import Button from "../components/common/Button";
+import Input from "../components/common/Input";
+import ContentBox from "../components/common/ContentBox";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -22,12 +25,14 @@ const SignUp = () => {
     alert("회원가입 완료");
   };
   return (
-    <form onSubmit={onSignupHandler}>
-      <input placeholder="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <input placeholder="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <input placeholder="nickname" type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-      <button>회원가입</button>
-    </form>
+    <ContentBox>
+      <form onSubmit={onSignupHandler}>
+        <Input placeholder="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input placeholder="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Input placeholder="nickname" type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+        <Button>회원가입</Button>
+      </form>
+    </ContentBox>
   );
 };
 

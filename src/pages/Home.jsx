@@ -6,10 +6,10 @@ const Home = () => {
         <button className="bg-yellow-400 p-5 rounded-lg font-semibold">오늘의 카페 찾으러 가기</button>
       </div>
       <div className="min-h-screen w-1/3 flex flex-row justify-center items-center">
-        <div className="w-span h-[70vh] rounded-3xl overflow-hidden absolute">
+        <div className="border h-[70vh] rounded-3xl overflow-hidden absolute">
           <img src="../public/home-pg-img.jpg" alt="카페 이미지" className="w-full h-full"/>
         </div>
-        <div className="w-span h-[70vh] rounded-3xl overflow-hidden absolute z-10">
+        <div className="border h-[70vh] rounded-3xl overflow-hidden absolute z-10">
           <img src="../public/home-pg-img.jpg" alt="카페 이미지" className="w-full h-full"/>
         </div>
       </div>

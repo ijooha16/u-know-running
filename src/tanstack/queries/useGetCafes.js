@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { searchCafes } from "../../services/kakao";
-import useLocationStore from "../../stores/useLocationStore";
+import useCafeStore from "../../stores/useCafeStore";
 
 const useGetCafes = (lat, lng) => {
-  const { setCafes } = useLocationStore();
+  const { setCafes } = useCafeStore();
 
   return useQuery({
     queryKey: ["cafes", lat, lng],

@@ -1,12 +1,12 @@
 import { useKakaoLoader, Map, MapMarker } from "react-kakao-maps-sdk";
 import useGetLocation from "../tanstack/queries/useGetLocation";
 import useGetCafes from "../tanstack/queries/useGetCafes";
-import useLocationStore from "../stores/useLocationStore";
 import CafeDetail from "../pages/CafeDetail";
+import useCafeStore from "../stores/useCafeStore";
 
 const KakaoCafeMap = ({width, height}) => {
   const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
-  const { selectedCafe, setSelectedCafe, cafes } = useLocationStore();
+  const { selectedCafe, setSelectedCafe, cafes } = useCafeStore();
 
   const { isLoading: isCafesLoading, error: cafesError } = useGetCafes(position?.lat, position?.lng);
 

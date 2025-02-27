@@ -1,14 +1,27 @@
+import { useEffect } from "react";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import MainTag from "../components/common/MainTag";
 import Tag from "../components/common/Tag";
 import ContentLayout from "../components/layout/ContentLayout";
 import Modal from "../components/Modal";
-import useLocationStore from "../stores/useLocationStore";
+import useCafeStore from "../stores/useCafeStore";
+import { useState } from "react";
+// import { fetchOGImage } from "../services/ogimage";
 
 const CafeDetail = () => {
-  const { selectedCafe, setSelectedCafe } = useLocationStore();
+  const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+  // const [image, setImage] = useState("");
+
+  // useEffect(() => {
+  //   const loadPreview = async () => {
+  //     const imgUrl = await fetchOGImage(place_url);
+  //     setImage(imgUrl || null); // 기본 이미지 설정 가능
+  //   };
+
+  //   loadPreview();
+  // }, [place_url]);
 
   if (!selectedCafe) return null;
 
@@ -20,7 +33,9 @@ const CafeDetail = () => {
       <ContentLayout>
         <Modal>
           <div className="flex gap-[30px">
-            <div className="bg-white w-[400px] mr-[30px]">{/* <img src={data.img} alt="카페 이미지" /> */}</div>
+            <div className="bg-white w-[400px] mr-[30px]">
+              {/* <img src={image} /> */}
+            </div>
             <div className="flex flex-col justify-between">
               <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-end">
                 <div className="w-full flex flex-col items-start">

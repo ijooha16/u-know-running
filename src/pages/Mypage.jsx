@@ -5,7 +5,7 @@ import ContentBox from "../components/common/ContentBox";
 
 const Mypage = () => {
   // 프로필 이미지 상태
-  const [profileImg, setProfileImg] = useState("");
+  const [profileImg, setProfileImg] = useState(null);
   // 프로필 데이터 수정 여부
   const [isEdit, setIsEdit] = useState(false);
 
@@ -13,13 +13,14 @@ const Mypage = () => {
   const handleProfileImgChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader(); // FileReader 사용
-      reader.onload = () => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
         setProfileImg(reader.result);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // 이미지를 data URL로 읽기
     }
   };
+
   // 수정 버튼
   const toggleEdit = (e) => {
     e.preventDefault();
@@ -35,13 +36,16 @@ const Mypage = () => {
           <form>
             <ContentBox className="mb-4">
               <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
-                {/* 프로필 이미지가 없으면 디폴트 이미지 표시 현재는 디폴트값 없음  */}
-                <img src={profileImg} alt="" className="w-full h-full object-cover" />
+                {/* profileImg가 없다면 기본 이미지 사용 */}
+                <img
+                  src={profileImg || null} // 프로필 이미지가 없으면 기본 이미지 사용
+                  className="w-full h-full object-cover"
+                />
               </div>
               <Input
                 type="file"
                 accept="image/*"
-                onChange={handleProfileImgChange} // 이미지 선택 시 실행
+                onChange={handleProfileImgChange}
                 className={`${isEdit ? "block" : "hidden"}`}
               />
               <Input type="text" placeholder="이름" className="border mb-4 mt-4" disabled={!isEdit} />

@@ -2,6 +2,8 @@ import { useState } from "react";
 import Button from "../components/common/Button";
 import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
+import supabase from "../services/supabase";
+import { useNavigate } from "react-router-dom";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
@@ -9,11 +11,13 @@ const LogIn = () => {
 
   const onLoginHandler = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
     if (error) throw error;
+    alert("로그인 성공");
+    useNavigate("/");
   };
 
   return (

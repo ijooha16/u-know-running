@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <ContentLayout>
       <div className="w-full min-h-screen flex flex-row justify-center items-center">
-        {/* 좌측 슬로건 & 버튼 */}
+        {/* 좌측 슬로건과 버튼 */}
         <div className="w-2/5 min-h-screen relative gap-16">
           <h1 className="text-[4vw] leading-normal font-black absolute left-10 top-1/3 transform -translate-y-1/3">
             Stay Motivated, <br /> Stay Caffeinated
@@ -17,7 +17,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 우측 지도 & 사진 카드 */}
+        {/* 우측 지도와 사진 카드 */}
         <div className="w-2/5 min-h-screen relative">
           <div className="w-[20vw] min-w-[15vw] h-[75vh] rounded-3xl z-0 absolute left-16 top-16 overflow-hidden drop-shadow-lg">
             <Map />

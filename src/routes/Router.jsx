@@ -3,10 +3,7 @@ import MainLayout from "../components/layout/MainLayout";
 import Home from "../pages/Home";
 import CafeDetail from "../pages/CafeDetail";
 import SignUp from "../pages/Signup";
-
 import Mypage from "../pages/Mypage";
-
-import SignUp from "../pages/Signup";
 
 const Router = () => {
   return (

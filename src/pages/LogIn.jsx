@@ -4,20 +4,28 @@ import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
 import supabase from "../services/supabase";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../stores/useUserStore";
+import { toast } from "react-toastify";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { setUserData } = useUserStore();
+
   const onLoginHandler = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
-    if (error) throw error;
-    alert("로그인 성공");
-    useNavigate("/");
+
+    if (error) {
+      return toast.error('로그인 오류: ' + error)
+    }
+
+    setUserData(data.user)
+    toast.success("로그인 성공");
   };
 
   return (

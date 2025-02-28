@@ -6,8 +6,6 @@ import SignUp from "../pages/Signup";
 
 import Mypage from "../pages/Mypage";
 
-import SignUp from "../pages/Signup";
-
 const Router = () => {
   return (
     <BrowserRouter>

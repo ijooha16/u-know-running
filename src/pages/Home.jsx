@@ -32,7 +32,7 @@ const Home = () => {
         <Link to="/cafe-list">
           <Button icon="hamburger_white" text="목록으로 보기" className="fixed bottom-[40px] right-[40px]" />
         </Link>
-        <KakaoCafeMap width='100vw' height='100vh' />
+        <KakaoCafeMap width="100vw" height="100vh" />
       </div>
     </>
   );

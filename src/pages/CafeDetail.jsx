@@ -8,11 +8,21 @@ import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
 import { useState } from "react";
 // import { fetchOGImage } from "../services/ogimage";
+import { fetchNaverImage } from "../services/naverimage";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
-  // const [image, setImage] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    const loadPreview = async () => {
+      const imgUrl = await fetchNaverImage(place_name);
+      setImage(imgUrl || null); // 기본 이미지 설정 가능
+    };
+
+    loadPreview();
+  }, [place_name]);
 
   // useEffect(() => {
   //   const loadPreview = async () => {
@@ -34,7 +44,7 @@ const CafeDetail = () => {
         <Modal>
           <div className="flex gap-[30px">
             <div className="bg-white w-[400px] mr-[30px]">
-              {/* <img src={image} /> */}
+              <img src={image} />
             </div>
             <div className="flex flex-col justify-between">
               <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-end">
@@ -43,9 +53,9 @@ const CafeDetail = () => {
                     <MainTag tagText="혼자 공부하기 좋은" />
                     <Icon icon="bookMark" />
                   </div>
-                  <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
+                  <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name || "이름없음"}</div>
                   <div className="text-darkgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
-                  <div className="text-darkgray text-[14px] pl-[12px]">{phone}</div>
+                  <div className="text-darkgray text-[14px] pl-[12px]">{phone || "번호없음"}</div>
                 </div>
                 <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
                   <Tag tagText="혼자 공부하기 좋은" />

@@ -5,6 +5,7 @@ import CafeDetail from "../pages/CafeDetail";
 import CafeList from "../pages/CafeList";
 import SignUp from "../pages/SignUp";
 import Mypage from "../pages/Mypage";
+import LogIn from "../pages/LogIn";
 
 const Router = () => {
   return (
@@ -13,7 +14,7 @@ const Router = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/my-page" element={<Mypage />}></Route>
-          {/* <Route path="/log-in" element={<Login />}></Route> */}
+          <Route path="/log-in" element={<LogIn />}></Route>
           <Route path="/sign-up" element={<SignUp />}></Route>
           <Route path="/cafe-detail" element={<CafeDetail />}></Route>
           {/* <Route path="/splash" element={<Splash />}></Route> */}

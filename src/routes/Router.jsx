@@ -6,6 +6,7 @@ import Splash from "../pages/Splash";
 import SignUp from "../pages/SignUp";
 import Mypage from "../pages/Mypage";
 import LogIn from "../pages/LogIn";
+import CafeList from '../pages/CafeList'
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
           <Route path="/sign-up" element={<SignUp />}></Route>
           <Route path="/cafe-detail" element={<CafeDetail />}></Route>
           <Route path="/splash" element={<Splash />}></Route>
+          <Route path="/cafe-list" element={<CafeList />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

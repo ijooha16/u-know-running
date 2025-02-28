@@ -6,9 +6,7 @@ import useTagStore from "../../stores/useTagStore";
 
 const MyTag = () => {
   const [showOptions, setShowOptions] = useState(true);
-  const {selectedTag, setSelectedTag} = useTagStore();
-
-  
+  const { selectedTag, setSelectedTag } = useTagStore();
 
   return (
     <>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { cafeTypes } from "../data/CafeTypes";
+import { CafeTagTypes } from "../data/CafeTypes";
 import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
@@ -88,7 +88,7 @@ const Splash = ({ userId }) => {
         <div className="text-center flex flex-col items-center gap-4">
           <p>강푸른 님이 선호하는 카페를 골라주세요.</p>
           <div className="flex flex-col space-y-2">
-            {cafeTypes.map((type) => (
+            {Object.keys(CafeTagTypes).map((type) => (
               <label key={type} className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"

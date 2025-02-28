@@ -6,7 +6,6 @@ import CafeList from "../pages/CafeList";
 import SignUp from "../pages/SignUp";
 import Mypage from "../pages/Mypage";
 
-
 const Router = () => {
   return (
     <BrowserRouter>

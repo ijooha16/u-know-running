@@ -5,6 +5,8 @@ import ContentBox from "../components/common/ContentBox";
 import axios from "axios";
 import supabase from "../services/supabase";
 import ContentLayout from "../components/layout/ContentLayout";
+import CafeCard from "../components/CafeCard";
+import useCafeStore from "../stores/useCafeStore";
 
 const Mypage = () => {
   // 프로필 이미지 상태
@@ -17,6 +19,10 @@ const Mypage = () => {
     gender: "",
     email: ""
   });
+  // 북마크, 태그 탭 전환 상태
+  const [conversionTab, setConversionTab] = useState("bookmark");
+
+  const { cafes, setCafes, selectedCafe } = useCafeStore();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -72,6 +78,11 @@ const Mypage = () => {
     setIsEdit((prev) => !prev);
   };
 
+  // 탭 변경
+  const handleTab = (tab) => {
+    setConversionTab(tab);
+  };
+
   return (
     <ContentLayout>
       <div className="flex p-8">
@@ -121,31 +132,52 @@ const Mypage = () => {
         </div>
 
         {/* 오른쪽 영역: 북마크된 콘텐츠, 조건부 랜더링 예정 */}
-        <div className="ml-[150px] mt-[40px]">
+        <div className="ml-[10px] mt-[40px]">
           <ContentBox className="ml-[150px] gap-4">
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-bold mb-4">북마크한 콘텐츠</h2>
-              {/* 한 줄에 3개씩 (grid 사용) */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="border p-4 rounded-md">
-                  <p>카페 1</p>
-                </div>
-                <div className="border p-4 rounded-md">
-                  <p>카페 2</p>
-                </div>
-                <div className="border p-4 rounded-md">
-                  <p>카페 3</p>
-                </div>
-                <div className="border p-4 rounded-md">
-                  <p>카페 4</p>
-                </div>
-                <div className="border p-4 rounded-md">
-                  <p>카페 5</p>
-                </div>
-                <div className="border p-4 rounded-md">
-                  <p>카페 6</p>
-                </div>
+              <h2 className="text-xl font-bold mb-4 text-center">Tab</h2>
+              <div className="flex gap-4 mb-4">
+                <Button
+                  type="button"
+                  onClick={() => handleTab("bookmark")}
+                  text="Bookmark"
+                  className={`px-4 py-2 border-none ${conversionTab === "bookmark" ? "bg-blue-500 text-black" : ""}`}
+                ></Button>
+                <div className="border-r border-gray-300"></div>
+                <Button
+                  type="button"
+                  onClick={() => handleTab("tag")}
+                  text="Tag"
+                  className={`px-4 py-2 border-none ${conversionTab === "tag" ? "bg-blue-500 text-black" : ""}`}
+                />
               </div>
+
+              {/* 한 줄에 3개씩 (grid 사용) */}
+              {conversionTab === "bookmark" ? (
+                <div className="grid grid-cols-2 gap-4">
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  <p>북마크1</p>
+                  {/* {cafes.length === 0 ? <p>카페가 없습니다.</p> : cafes.map((cafe) => <CafeCard key={cafe.id} />)} */}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  {/* 태그 관련 콘텐츠 */}
+                  <p>태그1</p>
+                  <p>태그1</p>
+                  <p>태그1</p>
+                  <p>태그1</p>
+                  <p>태그1</p>
+                  <p>태그1</p>
+                  <p>태그1</p>
+                  <p>태그1</p>
+                </div>
+              )}
             </div>
           </ContentBox>
         </div>

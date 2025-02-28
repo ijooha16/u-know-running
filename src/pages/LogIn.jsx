@@ -1,17 +1,30 @@
-import Button from "../components/common/Button"
-import ContentBox from "../components/common/ContentBox"
-import Input from "../components/common/Input"
+import { useState } from "react";
+import Button from "../components/common/Button";
+import ContentBox from "../components/common/ContentBox";
+import Input from "../components/common/Input";
 
 const LogIn = () => {
-return (
-    <form>
-        <ContentBox>
-            <Input/>
-            <Input/>
-            <Button/>
-        </ContentBox>
-    </form>
-)
-}
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-export default LogIn
+  const onLoginHandler = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    if (error) throw error;
+  };
+
+  return (
+    <form onSubmit={onLoginHandler}>
+      <ContentBox>
+        <Input placeholder="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input placeholder="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Button text="로그인" />
+      </ContentBox>
+    </form>
+  );
+};
+
+export default LogIn;

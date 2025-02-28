@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export const searchCafes = async (lat, lng, radius = 3000) => {
   try {
     if (!window.kakao || !window.kakao.maps) {

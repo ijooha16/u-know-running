@@ -4,6 +4,7 @@ import MainTag from "../components/common/MainTag";
 import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
+import CafeCard from "../components/CafeCard";
 
 const CafeDetail = () => {
   const { selectedCafe } = useCafeStore();
@@ -12,8 +13,9 @@ const CafeDetail = () => {
   if (!selectedCafe) return null;
 
   return (
-        <Modal>
-          <div className="flex gap-[30px]">
+    <Modal>
+      <CafeCard />
+      {/* <div className="flex gap-[30px]">
             <div className="bg-white w-[400px] min-h-[400px]"></div>
             <div className="w-[400px] flex flex-col gap-[16px] justify-between py-[16px] items-end">
               <div className="w-full flex flex-col items-start gap-[20px]">
@@ -36,8 +38,8 @@ const CafeDetail = () => {
                 <Button text="웹사이트 바로가기" />
               </a>
             </div>
-          </div>
-        </Modal>
+          </div> */}
+    </Modal>
   );
 };
 

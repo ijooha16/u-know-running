@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export const searchCafes = async (lat, lng, radius = 3000) => {
   try {
     if (!window.kakao || !window.kakao.maps) {
@@ -24,6 +26,7 @@ export const searchCafes = async (lat, lng, radius = 3000) => {
     });
   } catch (error) {
     console.error("카페 검색 중 오류 발생:", error);
+    toast.error("카페 검색 중 오류 발생");
     throw error;
   }
 };

@@ -1,6 +1,8 @@
+import CafeCard from "../components/CafeCard";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import MainTag from "../components/common/MainTag";
+import MyTag from "../components/common/MyTag";
 import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
@@ -10,7 +12,7 @@ const CafeDetail = () => {
   const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
 
   if (!selectedCafe) return null;
-
+  
   return (
     <Modal>
       <div className="flex gap-[30px]">
@@ -31,6 +33,7 @@ const CafeDetail = () => {
               <Tag tagText="혼자 공부하기 좋은" />
               <Tag tagText="혼자 공부하기 좋은" />
             </div>
+            <MyTag />
           </div>
           <a href={place_url} target="_blank" rel="noopener noreferrer">
             <Button text="웹사이트 바로가기" />

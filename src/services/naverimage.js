@@ -1,3 +1,4 @@
+// ogimage 대체 - 사유: ogimage로 불러올 수 있는 이미지가 지도로 한정됨.
 export const fetchNaverImage = async (place_name) => {
   try {
     const response = await fetch(`/api/naver-image?query=${place_name}`);

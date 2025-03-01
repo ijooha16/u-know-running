@@ -12,9 +12,7 @@ const CafeDetail = () => {
   const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
 
   if (!selectedCafe) return null;
-
-  console.log(selectedCafe);
-
+  
   return (
     <Modal>
       <div className="flex gap-[30px]">

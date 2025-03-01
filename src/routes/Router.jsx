@@ -8,6 +8,7 @@ import Mypage from "../pages/Mypage";
 import LogIn from "../pages/LogIn";
 import CafeList from '../pages/CafeList'
 
+
 const Router = () => {
   return (
     <BrowserRouter>

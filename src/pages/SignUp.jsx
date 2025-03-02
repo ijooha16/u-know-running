@@ -10,6 +10,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const navigate = useNavigate();
 
   const onSignupHandler = async (e) => {
     e.preventDefault();
@@ -30,8 +31,7 @@ const SignUp = () => {
 
     //회원가입 완료 후 알럿창과 함께 페이지 이동
     toast.success('회원가입 완료!')
-    // useNavigate('')
-    //ㄴ오류날까봐 일단 주석처리....
+    navigate('/splash')
   };
 
   return (

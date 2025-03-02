@@ -27,7 +27,7 @@ const CafeDetail = () => {
   
   return (
     <div
-      onClick={() => setSelectedCafe(null)}
+      onClick={() => selectedCafe(null)}
       className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
     >
       <ContentLayout>
@@ -62,9 +62,9 @@ const CafeDetail = () => {
           <a href={place_url} target="_blank" rel="noopener noreferrer">
             <Button text="웹사이트 바로가기" />
           </a>
-        </div>
-      </div>
-    </Modal>
+        </Modal>
+      </ContentLayout>
+    </div>
   );
 };
 

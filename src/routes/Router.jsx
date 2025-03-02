@@ -3,7 +3,7 @@ import MainLayout from "../components/layout/MainLayout";
 import Home from "../pages/Home";
 import CafeDetail from "../pages/CafeDetail";
 import Splash from "../pages/Splash";
-import SignUp from "../pages/Signup";
+import SignUp from "../pages/SignUp";
 import Mypage from "../pages/Mypage";
 import LogIn from "../pages/LogIn";
 

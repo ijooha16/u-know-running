@@ -5,7 +5,7 @@ const useCafeStore = create((set) => ({
   cafes: [],
 
   setSelectedCafe: (cafe) => set({ selectedCafe: cafe }),
-  setCafes: (cafes) => set({ cafes }),
+  setCafes: (cafes) => set({ cafes })
 }));
 
 export default useCafeStore;

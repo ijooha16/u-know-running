@@ -9,11 +9,14 @@ import useCafeStore from "../stores/useCafeStore";
 import { useState, useEffect } from "react";
 import { fetchNaverImage } from "../services/naverimage";
 import ContentLayout from "../components/layout/ContentLayout";
+import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
-  const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+  const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
+
+  console.log("정보확인", selectedCafe);
 
   useEffect(() => {
     const loadPreview = async () => {
@@ -25,6 +28,11 @@ const CafeDetail = () => {
   }, [place_name]);
 
   if (!selectedCafe) return null;
+
+  const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
+
+  if (isLoading) return <div>태그 로딩중..</div>;
+  if (error) return <div>태그 불러오기 실패</div>;
 
   return (
     <div
@@ -49,9 +57,12 @@ const CafeDetail = () => {
                   <div className="text-darkgray text-[14px] pl-[12px]">{phone || "번호없음"}</div>
                 </div>
                 <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
+                  {/* <Tag tagText="혼자 공부하기 좋은" />
                   <Tag tagText="혼자 공부하기 좋은" />
-                  <Tag tagText="혼자 공부하기 좋은" />
-                  <Tag tagText="혼자 공부하기 좋은" />
+                  <Tag tagText="혼자 공부하기 좋은" /> */}
+                  {tagList.map(({ tag, count }) => (
+                    <Tag key={tag} tagText={`${tag} - ${count}회`} />
+                  ))}
                 </div>
                 <a href={place_url} target="_blank" rel="noopener noreferrer">
                   <Button text="웹사이트 바로가기" />

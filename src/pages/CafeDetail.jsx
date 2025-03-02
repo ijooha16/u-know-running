@@ -6,11 +6,12 @@ import MyTag from "../components/common/MyTag";
 import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { fetchNaverImage } from "../services/naverimage";
+import ContentLayout from "../components/layout/ContentLayout";
 
 const CafeDetail = () => {
-  const { selectedCafe } = useCafeStore();
+  const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
 
@@ -24,7 +25,7 @@ const CafeDetail = () => {
   }, [place_name]);
 
   if (!selectedCafe) return null;
-  
+
   return (
     <div
       onClick={() => setSelectedCafe(null)}
@@ -62,9 +63,9 @@ const CafeDetail = () => {
           <a href={place_url} target="_blank" rel="noopener noreferrer">
             <Button text="웹사이트 바로가기" />
           </a>
-        </div>
-      </div>
-    </Modal>
+        </Modal>
+      </ContentLayout>
+    </div>
   );
 };
 

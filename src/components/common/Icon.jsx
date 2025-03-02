@@ -8,16 +8,18 @@ import hamburgerIconWhite from "../../assets/icons/icon_hamburger_white.png";
 //iconSrc 객체 안에 키-값(아이콘변수명) 넣어주기
 //쓸 컴포넌트로 가서 iconSrc='키'
 
-const Icon = ({ icon, className }) => {
+const Icon = ({ icon, className, onClick }) => {
   const iconSrc = {
     bookMark: bookMarkIcon,
     hamburger: hamburgerIcon,
     profile: profileIcon,
     close: closeIcon,
-    hamburger_white: hamburgerIconWhite,
+    hamburger_white: hamburgerIconWhite
   };
 
-  return <img src={iconSrc[icon]} alt={`${icon} icon`} className={`w-[32px] h-[32px] ${className}`} />;
+  return (
+    <img src={iconSrc[icon]} alt={`${icon} icon`} className={`w-[32px] h-[32px] ${className}`} onClick={onClick} />
+  );
 };
 
 export default Icon;

@@ -22,7 +22,8 @@ const Mypage = () => {
   });
   // 북마크, 태그 탭 전환 상태
   const [conversionTab, setConversionTab] = useState("bookmark");
-  const { cafes } = useCafeStore(); // 카페 데이터를 가져오는 스토어
+  const [bookmarkedCafes, setBookmarkedCafes] = useState([]);
+  // const { cafes } = useCafeStore(); // 카페 데이터를 가져오는 스토어
 
   // 컴포넌트 마운트 시 사용자 정보 가져오기
   useEffect(() => {
@@ -63,6 +64,45 @@ const Mypage = () => {
     };
 
     fetchUser(); // 사용자 정보 가져오기 실행
+  }, []);
+
+  const fetchBookmarkedCafes = async (userId) => {
+    const { data: bookmarkData, error: bookmarkError } = await supabase
+      .from("bookmarks")
+      .select("cafe_id")
+      .eq("users_uid", userId);
+
+    if (bookmarkError) {
+      console.error("북마크된 카페를 가져오는 데 실패했습니다.", bookmarkError.message);
+      return;
+    }
+
+    // 북마크된 카페 id로 카페 정보 가져오기
+    const cafeIds = bookmarkData.map((bookmark) => bookmark.cafe_id);
+    const { data: cafesData, error: cafesError } = await supabase.from("cafeCards").select("*").in("id", cafeIds);
+
+    if (cafesError) {
+      console.error("카페 정보를 가져오는 데 실패했습니다.", cafesError.message);
+      return;
+    }
+
+    setBookmarkedCafes(cafesData); // 상태에 북마크된 카페 목록 저장
+  };
+
+  // 컴포넌트 마운트 시 로그인한 사용자 정보와 북마크된 카페 목록 가져오기
+  useEffect(() => {
+    const fetchUserAndBookmarks = async () => {
+      const { data: authUser, error: authError } = await supabase.auth.getUser();
+      if (authError || !authUser?.user) {
+        console.error("로그인된 사용자를 가져오는 데 실패했습니다.", authError);
+        return;
+      }
+
+      const userId = authUser.user.id;
+      await fetchBookmarkedCafes(userId);
+    };
+
+    fetchUserAndBookmarks();
   }, []);
 
   // 프로필 이미지 변경 핸들러
@@ -213,9 +253,11 @@ const Mypage = () => {
               {/* 북마크 탭일 경우 콘텐츠 표시 */}
               {conversionTab === "bookmark" ? (
                 <div className="grid grid-cols-2 gap-4">
-                  <p>북마크1</p>
-                  <p>북마크1</p>
-                  {/* 카페 목록을 표시할 예정 */}
+                  {bookmarkedCafes.length > 0 ? (
+                    bookmarkedCafes.map((cafe) => <CafeCard key={cafe.id} cafe={cafe} />)
+                  ) : (
+                    <p>북마크된 카페가 없습니다.</p>
+                  )}
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4">

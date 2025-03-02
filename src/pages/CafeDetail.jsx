@@ -1,17 +1,16 @@
-import { useEffect } from "react";
+import CafeCard from "../components/CafeCard";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import MainTag from "../components/common/MainTag";
+import MyTag from "../components/common/MyTag";
 import Tag from "../components/common/Tag";
-import ContentLayout from "../components/layout/ContentLayout";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
 import { useState } from "react";
-// import { fetchOGImage } from "../services/ogimage";
 import { fetchNaverImage } from "../services/naverimage";
 
 const CafeDetail = () => {
-  const { selectedCafe, setSelectedCafe } = useCafeStore();
+  const { selectedCafe } = useCafeStore();
   const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
 
@@ -24,17 +23,8 @@ const CafeDetail = () => {
     loadPreview();
   }, [place_name]);
 
-  // useEffect(() => {
-  //   const loadPreview = async () => {
-  //     const imgUrl = await fetchOGImage(place_url);
-  //     setImage(imgUrl || null); // 기본 이미지 설정 가능
-  //   };
-
-  //   loadPreview();
-  // }, [place_url]);
-
   if (!selectedCafe) return null;
-
+  
   return (
     <div
       onClick={() => setSelectedCafe(null)}
@@ -67,10 +57,14 @@ const CafeDetail = () => {
                 </a>
               </div>
             </div>
+            <MyTag />
           </div>
-        </Modal>
-      </ContentLayout>
-    </div>
+          <a href={place_url} target="_blank" rel="noopener noreferrer">
+            <Button text="웹사이트 바로가기" />
+          </a>
+        </div>
+      </div>
+    </Modal>
   );
 };
 

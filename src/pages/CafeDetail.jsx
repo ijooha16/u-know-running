@@ -16,6 +16,8 @@ const CafeDetail = () => {
   const [image, setImage] = useState("");
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
 
+  console.log("정보확인", selectedCafe);
+
   useEffect(() => {
     const loadPreview = async () => {
       const imgUrl = await fetchNaverImage(place_name);
@@ -45,7 +47,7 @@ const CafeDetail = () => {
               <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-start">
                 <div className="w-full flex flex-col items-start">
                   <div className="flex justify-between w-full items-center pr-[12px]">
-                    <MainTag tagText={tagList[0]?.tag || '아무 태그도 등록되지 않았어요'} />
+                    <MainTag tagText={tagList[0]?.tag || "아무 태그도 등록되지 않았어요"} />
                     <Icon icon="bookMark" />
                   </div>
                   <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name || "이름없음"}</div>
@@ -53,7 +55,7 @@ const CafeDetail = () => {
                   <div className="text-darkgray text-[14px] pl-[12px]">{phone || "번호없음"}</div>
                 </div>
                 <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
-                  {tagList?.map(( tag, idx) => {
+                  {tagList?.map((tag, idx) => {
                     if (idx === 0) return null;
                     return <Tag key={tag.tag} tagText={`${tag.tag} - ${tag.count}`} />;
                   })}

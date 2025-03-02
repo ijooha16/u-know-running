@@ -4,7 +4,7 @@ import useGetCafes from "../tanstack/queries/useGetCafes";
 import CafeDetail from "../pages/CafeDetail";
 import useCafeStore from "../stores/useCafeStore";
 
-const KakaoCafeMap = ({width, height}) => {
+const KakaoCafeMap = ({ width, height }) => {
   const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
   const { selectedCafe, setSelectedCafe, cafes } = useCafeStore();
 
@@ -12,7 +12,7 @@ const KakaoCafeMap = ({width, height}) => {
 
   const [loading, loadError] = useKakaoLoader({
     appkey: import.meta.env.VITE_KAKAO_MAP_KEY,
-    libraries: ["services"],
+    libraries: ["services"]
   });
 
   if (loading || isLocationLoading || isCafesLoading) return <p>지도 로딩 중...</p>;
@@ -20,11 +20,7 @@ const KakaoCafeMap = ({width, height}) => {
 
   return (
     <div className="relative">
-      <Map
-        center={position}
-        style={{ width: `${width}`, height: `${height}` }}
-        level={3}
-      >
+      <Map center={position} style={{ width: `${width}`, height: `${height}` }} level={3}>
         {/* 현재 위치 마커 */}
         {position && <MapMarker position={position} title="내 위치" />}
 

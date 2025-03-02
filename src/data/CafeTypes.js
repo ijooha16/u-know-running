@@ -1,4 +1,4 @@
-export const CafeTagTypes = {
+export const CafeTagTypes = Object.freeze({
   ALONE: "혼자 공부하기 좋은",
   SPACE: "좌석 간격이 넓은",
   TALK: "떠들기 좋은",
@@ -9,4 +9,4 @@ export const CafeTagTypes = {
   DESERT: "디저트에 특화된",
   MOOD: "조명이 어두운",
   CLEAN: "화장실이 깨끗한"
-};
+});

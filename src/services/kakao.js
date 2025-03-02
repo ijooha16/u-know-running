@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export const searchCafes = async (lat, lng, radius = 3000) => {
   try {

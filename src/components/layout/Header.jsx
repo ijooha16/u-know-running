@@ -8,8 +8,12 @@ const Header = () => {
         Logo
       </Link>
       <div className="w-[220px] flex gap-[40px]">
-        <div className="text-darkgray">마이페이지</div>
-        <Link to='/log-in' className="text-darkgray">로그인 / 회원가입</Link>
+        <Link to="/my-page">
+          <div className="text-darkgray">마이페이지</div>
+        </Link>
+        <Link to="/log-in" className="text-darkgray">
+          로그인 / 회원가입
+        </Link>
       </div>
     </div>
   );

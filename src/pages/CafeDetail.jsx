@@ -12,9 +12,9 @@ import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
-  const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+  const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
-  const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
+  const { data: tagList, isLoading, error } = useGetCafeTopTags(selectedCafe.id);
 
   console.log("정보확인", selectedCafe);
 

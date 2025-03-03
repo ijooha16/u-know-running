@@ -5,7 +5,11 @@ import { Fragment } from "react";
 import useUpsertTagMutation from "../../tanstack/mutations/useUpsertTagMutation";
 import useCafeStore from "../../stores/useCafeStore";
 import useUserStore from "../../stores/useUserStore";
+<<<<<<< HEAD
 import { useGetCafeTagQuery } from "../../tanstack/queries/useGetTags";
+=======
+import { useGesCafeTagQuery } from "../../tanstack/queries/useGetTags";
+>>>>>>> 94d1bf2 (feat: 태그 추가 기능)
 
 const MyTag = () => {
   const [showOptions, setShowOptions] = useState(false);

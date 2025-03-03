@@ -1,4 +1,3 @@
-import CafeCard from "../components/CafeCard";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import MainTag from "../components/common/MainTag";
@@ -15,8 +14,7 @@ const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
-
-  console.log("정보확인", selectedCafe);
+  const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
 
   useEffect(() => {
     const loadPreview = async () => {
@@ -29,27 +27,25 @@ const CafeDetail = () => {
 
   if (!selectedCafe) return null;
 
-  const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
-
   if (isLoading) return <div>태그 로딩중..</div>;
   if (error) return <div>태그 불러오기 실패</div>;
 
   return (
     <div
-      onClick={() => selectedCafe(null)}
+      onClick={() => setSelectedCafe(null)}
       className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
     >
       <ContentLayout>
         <Modal>
-          <div className="flex gap-[30px">
-            <div className="bg-white w-[400px] mr-[30px]">
-              <img src={image} />
+          <div className="flex gap-[30px]">
+            <div className="min-h-[320px]">
+              <img src={image} alt='이미지가 없어요' />
             </div>
-            <div className="flex flex-col justify-between">
-              <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-end">
+            <div className="flex flex-col justify-between items-end">
+              <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-start">
                 <div className="w-full flex flex-col items-start">
                   <div className="flex justify-between w-full items-center pr-[12px]">
-                    <MainTag tagText="혼자 공부하기 좋은" />
+                    <MainTag tagText={tagList[0]?.tag || "아무 태그도 등록되지 않았어요"} />
                     <Icon icon="bookMark" />
                   </div>
                   <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name || "이름없음"}</div>
@@ -57,23 +53,18 @@ const CafeDetail = () => {
                   <div className="text-darkgray text-[14px] pl-[12px]">{phone || "번호없음"}</div>
                 </div>
                 <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
-                  {/* <Tag tagText="혼자 공부하기 좋은" />
-                  <Tag tagText="혼자 공부하기 좋은" />
-                  <Tag tagText="혼자 공부하기 좋은" /> */}
-                  {tagList.map(({ tag, count }) => (
-                    <Tag key={tag} tagText={`${tag} - ${count}회`} />
-                  ))}
+                  {tagList?.map((tag, idx) => {
+                    if (idx === 0) return null;
+                    return <Tag key={tag.tag} tagText={`${tag.tag} - ${tag.count}`} />;
+                  })}
                 </div>
-                <a href={place_url} target="_blank" rel="noopener noreferrer">
-                  <Button text="웹사이트 바로가기" />
-                </a>
+                <MyTag />
               </div>
+              <a href={place_url} target="_blank" rel="noopener noreferrer">
+                <Button text="웹사이트 바로가기" />
+              </a>
             </div>
-            <MyTag />
           </div>
-          <a href={place_url} target="_blank" rel="noopener noreferrer">
-            <Button text="웹사이트 바로가기" />
-          </a>
         </Modal>
       </ContentLayout>
     </div>

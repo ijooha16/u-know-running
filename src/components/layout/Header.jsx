@@ -19,8 +19,10 @@ const Header = () => {
   return (
     <div className="h-[160px] bg-white w-full flex justify-between items-center px-[40px]">
       <div className="w-[220px]"></div>
-      <Link to="/" className="text-[#191970] text-[42px] font-bold">
-        Logo
+      <Link to="/" >
+        <a>
+          <img src="src/components/layout/image/해시카페.png" className="w-[150px]" />
+        </a>
       </Link>
       <div className="w-[220px] flex gap-[40px]">
         <Link to={userData ? "/my-page" : "/sign-up"} className="text-darkgray">

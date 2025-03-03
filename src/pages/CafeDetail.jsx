@@ -16,8 +16,6 @@ const CafeDetail = () => {
   const [image, setImage] = useState("");
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
 
-  console.log(tagList)
-
   useEffect(() => {
     const loadPreview = async () => {
       const imgUrl = await fetchNaverImage(place_name);
@@ -34,7 +32,7 @@ const CafeDetail = () => {
 
   return (
     <div
-      onClick={() => selectedCafe(null)}
+      onClick={() => setSelectedCafe(null)}
       className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
     >
       <ContentLayout>

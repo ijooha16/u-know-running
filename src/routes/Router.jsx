@@ -66,20 +66,6 @@ const routes = createBrowserRouter([...publicRoutes, ...(userData ? [] : uncerti
 const Router = () => {
   return (
     <RouterProvider router={routes} />
-
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route element={<MainLayout />}>
-    //       <Route path="/" element={<Home />} />
-    //       <Route path="/my-page" element={<Mypage />}></Route>
-    //       <Route path="/log-in" element={<LogIn />}></Route>
-    //       <Route path="/sign-up" element={<SignUp />}></Route>
-    //       <Route path="/cafe-detail" element={<CafeDetail />}></Route>
-    //       <Route path="/splash" element={<Splash />}></Route>
-    //       <Route path="/cafe-results-list" element={<CafeResultsList />}></Route>
-    //     </Route>
-    //   </Routes>
-    // </BrowserRouter>
   );
 };
 

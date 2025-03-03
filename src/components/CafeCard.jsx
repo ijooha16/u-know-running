@@ -11,15 +11,11 @@ const CafeCard = ({cafe, cafeKey}) => {
   const [tags, setTags] = useState([]); // 태그 상태
   const [image, setImage] = useState("");
 
-
-
-
   // 카페 이미지 가져오기
   useEffect(() => {
     const loadPreview = async () => {
       const imgUrl = await fetchNaverImage(place_name);
       setImage(imgUrl || null); // 기본 이미지 설정 가능
-      console.log("image==> ", imgUrl);
     };
     loadPreview();
   }, [place_name]);

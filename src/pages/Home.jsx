@@ -3,7 +3,7 @@ import cafeImage from "../assets/images/home-pg-img.jpg"; // 이미지 파일을
 import ContentLayout from "../components/layout/ContentLayout";
 import Button from "../components/common/Button";
 import KakaoCafeMap from "../components/KakaoCafeMap";
-import useUserStore from "../../stores/useUserStore";
+import useUserStore from "../stores/useUserStore";
 
 const Home = () => {
   const { userData } = useUserStore();

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import supabase from "../../services/supabase";
+import useUserStore from "../../stores/useUserStore";
 
 const Header = () => {
-  const userData = JSON.parse(localStorage.getItem("user-data"));
+  const { userData } = useUserStore();
 
   const onLogoutHandler = async () => {
     const { error } = await supabase.auth.signOut();

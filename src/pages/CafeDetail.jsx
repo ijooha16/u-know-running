@@ -15,6 +15,9 @@ const CafeDetail = () => {
   const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  console.log(image);
 
   useEffect(() => {
     const loadPreview = async () => {
@@ -38,8 +41,12 @@ const CafeDetail = () => {
       <ContentLayout>
         <Modal>
           <div className="flex gap-[30px]">
-            <div className="min-h-[320px]">
-              <img src={image} alt='이미지가 없어요' />
+            <div className="flex flex-wrap max-w-[500px] min-h-[320px]">
+              {image &&
+                image.map((image, idx) => {
+                  if (idx >= 5) return;
+                  return <img key={image.link} src={image.thumbnail} alt='no image' onError="this.style.display='none'" />;
+                })}
             </div>
             <div className="flex flex-col justify-between items-end">
               <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-start">
@@ -72,3 +79,9 @@ const CafeDetail = () => {
 };
 
 export default CafeDetail;
+
+const Img = ({ img }) => {
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  return isLoaded ? <img src={img} alt="이미지가 없습니다" onError={() => setIsLoaded(false)} /> : null;
+};

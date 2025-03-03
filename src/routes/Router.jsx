@@ -1,4 +1,4 @@
-import { BrowserRouter, createBrowserRouter, Route, RouterProvider, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
 import Home from "../pages/Home";
 import CafeDetail from "../pages/CafeDetail";
@@ -64,9 +64,7 @@ const certifiedRoutes = [
 const routes = createBrowserRouter([...publicRoutes, ...(userData ? [] : uncertifiedRoutes), ...certifiedRoutes]);
 
 const Router = () => {
-  return (
-    <RouterProvider router={routes} />
-  );
+  return <RouterProvider router={routes} />;
 };
 
 export default Router;

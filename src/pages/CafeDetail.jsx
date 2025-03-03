@@ -12,11 +12,11 @@ import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
-  const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+  const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
-  const { data: tagList, isLoading, error } = useGetCafeTopTags(selectedCafe.id);
+  const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
 
-  console.log("정보확인", selectedCafe);
+  console.log(tagList)
 
   useEffect(() => {
     const loadPreview = async () => {
@@ -34,7 +34,7 @@ const CafeDetail = () => {
 
   return (
     <div
-      onClick={() => setSelectedCafe(null)}
+      onClick={() => selectedCafe(null)}
       className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
     >
       <ContentLayout>

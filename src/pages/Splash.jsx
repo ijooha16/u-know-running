@@ -4,11 +4,15 @@ import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import supabase from "../services/supabase";
+import useUserStore from "../stores/useUserStore";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Splash = () => {
-  const userData = JSON.parse(localStorage.getItem("user-data") || "{}");
-  const nickname = userData.nickname || "플레인텍스트";
-  const userId = userData.user_uid || "플레인텍스트";
+  const { userData } = useUserStore();
+  const nickname = userData.user_metadata.nickname;
+
+  const navigator = useNavigate();
 
   const [page, setPage] = useState(0);
   const [gender, setGender] = useState("");
@@ -16,7 +20,6 @@ const Splash = () => {
   const [tags, setTags] = useState([]);
   const [selected, setSelected] = useState(null); // 성별 선택용 상태
 
-  // Supabase users 테이블 업데이트 함수 (상위 스코프로 이동)
   const updateUserInfo = async () => {
     const { error } = await supabase
       .from("users")
@@ -25,13 +28,20 @@ const Splash = () => {
         mbti,
         tag: tags
       })
-      .eq("user_uid", userId);
+      .eq("users_uid", userData.id);
 
     if (error) console.error("유저 정보 업데이트 실패", error);
     else console.log("유저 정보 업데이트 완료");
   };
 
   const nextPage = () => {
+    if (page === 2) {
+      if (!isValidMbti(mbti)) {
+        toast.error("유효한 mbti 형식을 입력해 주세요.");
+        return;
+      }
+      setMbti(mbti.toUpperCase());
+    }
     if (page < 3) {
       // 페이지 전환 시, 현재 페이지가 1일 때 선택된 성별을 gender 상태로 저장
       if (page === 1 && selected) {
@@ -40,6 +50,12 @@ const Splash = () => {
       setPage(page + 1);
     } else {
       updateUserInfo();
+      toast.success(`${nickname}님, 환영합니다! Home 으로 이동하여 오늘의 카페를 찾아보세요!`, {
+        autoClose: 8000,
+        onClose: () => {
+          navigator("/");
+        }
+      });
     }
   };
 
@@ -52,6 +68,12 @@ const Splash = () => {
     setSelected(selected === value ? null : value);
   };
 
+  // mbti 유효성 검사
+  const isValidMbti = (input) => {
+    const mbtiRegex = /^[IENSTFPJ]{4}$/i;
+    return mbtiRegex.test(input);
+  };
+
   return (
     <ContentBox>
       {page === 0 && (
@@ -59,7 +81,9 @@ const Splash = () => {
           <p>
             더 정확한 추천을 위해,
             <br />
-            {nickname} 님의 성별, MBTI, 선호하는 카페 유형을 <br />
+            {nickname} 님의
+            <br />
+            성별, MBTI, 선호하는 카페 유형을 <br />
             알아보겠습니다!
           </p>
           <Button onClick={nextPage} text="시작하기" />
@@ -100,7 +124,10 @@ const Splash = () => {
             type="text"
             placeholder="MBTI 입력"
             value={mbti}
-            onChange={(e) => setMbti(e.target.value)}
+            maxLength={4}
+            onChange={(e) => {
+              setMbti(e.target.value);
+            }}
             className="text-center border border-gray-300"
           />
           <Button onClick={nextPage} text="다음" />

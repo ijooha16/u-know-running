@@ -22,10 +22,19 @@ const CafeResultsList = () => {
     libraries: ["services"]
   });
 
-  if (loading || isLocationLoading || isCafesLoading) return <p>지도 로딩 중...</p>;
-  if (locationError || cafesError || loadError) return <p>지도 로딩 오류 발생</p>;
+  if (loading || isLocationLoading || isCafesLoading) return <p>카페 로딩 중...</p>;
+  if (locationError || cafesError || loadError) return <p>카페 로딩 오류 발생</p>;
 
   console.log("this is selected tag==>", selected);
+
+  const filteredCafes = cafes.filter((cafe) => {
+    if (selected === null) return true;
+    return cafe.MainTag === CafeTagTypes[selected];
+  });
+
+  console.log("this is selected tag ==> ", selected);
+  console.log("CafeTagTypes[selected] ==> ", Object.values(CafeTagTypes)[selected]);
+
 
   return (
     <ContentLayout>
@@ -40,7 +49,7 @@ const CafeResultsList = () => {
           
           {/* 카페 카드들 */}
           <div className="grid grid-cols-3 gap-[30px] mx-auto w-fit mt-10">
-          {cafes.map((cafe) => (
+          {filteredCafes.map((cafe) => (
             <CafeCard key={cafe.id} cafe={cafe} />
           ))}
           </div>

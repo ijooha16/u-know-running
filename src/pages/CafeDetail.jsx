@@ -38,10 +38,10 @@ const CafeDetail = () => {
       <ContentLayout>
         <Modal>
           <div className="flex gap-[30px]">
-            <div className="bg-white w-[400px]">
-              <img src={image} />
+            <div className="min-h-[320px]">
+              <img src={image} alt='이미지가 없어요' />
             </div>
-            <div className="flex flex-col items-end">
+            <div className="flex flex-col justify-between items-end">
               <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-start">
                 <div className="w-full flex flex-col items-start">
                   <div className="flex justify-between w-full items-center pr-[12px]">

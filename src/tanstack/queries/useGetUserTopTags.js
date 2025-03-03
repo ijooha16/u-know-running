@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import getUserTopTags from "../../services/mypageTag";
+import { getUserTopTags } from "../../services/tag";
 
 export function useGetUserTopTags(userId) {
   return useQuery({

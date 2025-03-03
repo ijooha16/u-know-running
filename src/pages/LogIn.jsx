@@ -3,14 +3,14 @@ import Button from "../components/common/Button";
 import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
 import supabase from "../services/supabase";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useUserStore from "../stores/useUserStore";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+  const { setUserData } = useUserStore();
 
   const onLoginHandler = async (e) => {
     e.preventDefault();
@@ -20,13 +20,15 @@ const LogIn = () => {
     });
 
     if (error) {
-      return toast.error('로그인 오류: ' + error)
+      return toast.error("로그인 오류: " + error);
     }
 
-    setUserData(data.user)
-    toast.success("로그인 성공");
+    setUserData(data.user);
     //리로드 해야지 조건부 렌더링이 돼서 깜빡이더라도.... 새로고침 이벤트
-    window.location.replace("/")
+    setTimeout(() => {
+      window.location.replace("/");
+    }, 800);
+    toast.success("로그인 성공");
   };
 
   return (

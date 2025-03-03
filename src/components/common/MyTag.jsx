@@ -5,11 +5,7 @@ import { Fragment } from "react";
 import useUpsertTagMutation from "../../tanstack/mutations/useUpsertTagMutation";
 import useCafeStore from "../../stores/useCafeStore";
 import useUserStore from "../../stores/useUserStore";
-<<<<<<< HEAD
 import { useGetCafeTagQuery } from "../../tanstack/queries/useGetTags";
-=======
-import { useGesCafeTagQuery } from "../../tanstack/queries/useGetTags";
->>>>>>> 94d1bf2 (feat: 태그 추가 기능)
 
 const MyTag = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -24,7 +20,7 @@ const MyTag = () => {
         onClick={() => setShowOptions(true)}
         className="flex items-center h-[40px] px-[16px] border-[3px] bg-[#8080ff22] border-[#8080ff] font-medium rounded-full"
       >
-        # {cafeData.length > 0 ? cafeData.map((cafe) => cafe.tag_type) : "태그를 선택해주세요"}
+        # {cafeData?.length > 0 ? cafeData.map((cafe) => cafe.tag_type) : "태그를 선택해주세요"}
       </div>
 
       {showOptions && (

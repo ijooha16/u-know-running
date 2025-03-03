@@ -3,14 +3,12 @@ import supabase from "../services/supabase";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ContentBox from "../components/common/ContentBox";
-import { useNavigate } from "react-router-dom";
 import useUserStore from "../stores/useUserStore";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  const navigate = useNavigate();
   const { setUserData } = useUserStore;
 
   const onSignupHandler = async (e) => {

@@ -1,4 +1,3 @@
-import CafeCard from "../components/CafeCard";
 import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import MainTag from "../components/common/MainTag";
@@ -13,8 +12,9 @@ import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
-  const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+  const { place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const [image, setImage] = useState("");
+  const { data: tagList, isLoading, error } = useGetCafeTopTags(selectedCafe.id);
 
   console.log("정보확인", selectedCafe);
 
@@ -29,14 +29,13 @@ const CafeDetail = () => {
 
   if (!selectedCafe) return null;
 
-  const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
 
   if (isLoading) return <div>태그 로딩중..</div>;
   if (error) return <div>태그 불러오기 실패</div>;
 
   return (
     <div
-      onClick={() => selectedCafe(null)}
+      onClick={() => setSelectedCafe(null)}
       className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
     >
       <ContentLayout>
@@ -63,13 +62,21 @@ const CafeDetail = () => {
                   {tagList.map(({ tag, count }) => (
                     <Tag key={tag} tagText={`${tag} - ${count}회`} />
                   ))}
+                  <div className="text-darkgray text-[14px] pl-[12px]">
+                    {address_name || road_address_name} <br /> {phone || "번호없음"}
+                  </div>
+                  <div className="flex gap-[12px] w-full my-[10px] overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <Tag tagText="혼자 공부하기 좋은" />
+                    <Tag tagText="혼자 공부하기 좋은" />
+                    <Tag tagText="혼자 공부하기 좋은" />
+                  </div>
+                  <MyTag />
                 </div>
                 <a href={place_url} target="_blank" rel="noopener noreferrer">
                   <Button text="웹사이트 바로가기" />
                 </a>
               </div>
             </div>
-            <MyTag />
           </div>
           <a href={place_url} target="_blank" rel="noopener noreferrer">
             <Button text="웹사이트 바로가기" />

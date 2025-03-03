@@ -12,3 +12,7 @@ export const fetchNaverImage = async (place_name) => {
     return null;
   }
 };
+
+
+// 1. naver api 요청할때 query stirng 에서 0 번째를 요청 할 수 있느지 ? query = {name } 여기서 더 추가가 되는지를 확인
+// 2. useNaverImage를 개선하는데 이걸 useQuery를 이용해서 queryKey , retry, staleTIme을 이용해서 중복되는 요청 막기를 해보는것으로

@@ -1,5 +1,5 @@
 const Tag = ({tagText, onClick, isSelected}) => {
-  return <div onClick={onClick} className={`flex items-center h-[30px] px-[16px] bg-white text-[14px] text-darkgray rounded-full hover:bg-[#3838ab] ${isSelected ? "bg-[#ff9173]" : "bg-[#191971]"}`}># {tagText}</div>;
+  return <div onClick={onClick} className={`flex items-center h-[30px] px-[16px] text-[14px] text-darkgray rounded-full hover:bg-[#3838ab] ${isSelected ? "bg-[#ff9173]" : "bg-[#191971]"}`}># {tagText}</div>;
 };
 
 export default Tag;

@@ -4,8 +4,8 @@ import Home from "../pages/Home";
 import CafeDetail from "../pages/CafeDetail";
 import Splash from "../pages/Splash";
 import SignUp from "../pages/SignUp";
-import Mypage from "../pages/Mypage";
 import LogIn from "../pages/LogIn";
+import Mypage from "../pages/Mypage";
 import CafeResultsList from "../pages/CafeResultsList";
 
 const Router = () => {

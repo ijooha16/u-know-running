@@ -134,3 +134,4 @@ const CafeCard = ({ cafe, cafeKey }) => {
 };
 
 export default CafeCard;
+

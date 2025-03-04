@@ -14,7 +14,6 @@ import supabase from "../services/supabase";
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
-  const [image, setImage] = useState("");
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [userData, setUserData] = useState(null); // supabase에서 유저 데이터 관리
@@ -171,3 +170,9 @@ const CafeDetail = () => {
 };
 
 export default CafeDetail;
+
+const Img = ({ img }) => {
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  return isLoaded ? <img src={img} alt="이미지가 없습니다" onError={() => setIsLoaded(false)} /> : null;
+};

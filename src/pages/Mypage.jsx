@@ -13,11 +13,14 @@ import { useGetUserTopTags } from "../tanstack/queries/useGetUserTopTags";
 import MainTag from "../components/common/MainTag";
 
 const Mypage = () => {
-  const [profileImg, setProfileImg] = useState(null); // 프로필 이미지 상태
+  const [profileImg, setProfileImg] = useState(null);
+  const [previewImg, setpreviewImg] = useState("");
+
   const [isEdit, setIsEdit] = useState(false); // 프로필 수정 모드 여부
   const [conversionTab, setConversionTab] = useState("bookmark"); // 탭 전환: "bookmark" or "tag"
 
   const { userData } = useUserStore();
+
   const { data: userInfo, isLoading: userLoading, isError: userError } = useUserInfo();
   const [editableUserInfo, setEditableUserInfo] = useState(userInfo);
   const { mutate: updateUserInfo } = useUpdateUserInfo();
@@ -32,20 +35,51 @@ const Mypage = () => {
 
   // 프로필 이미지 변경 핸들러
   const handleProfileImgChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImg(reader.result);
-      };
-      reader.readAsDataURL(file);
+    const inputFile = e.target.files;
+    if (!inputFile) {
+      return;
+    } else {
+      setpreviewImg(URL.createObjectURL(inputFile[0]));
+      setProfileImg(inputFile[0]);
     }
+  };
+
+  const uploadFileAndGetUrl = async () => {
+    if (!profileImg || !userData.id) return null;
+    const filePath = `users profile/${crypto.randomUUID()}_${profileImg.lastModified}`;
+
+    const { error: uploadError } = await supabase.storage.from("users profile").upload(filePath, profileImg);
+    if (uploadError) {
+      console.error("파일 업로드 에러:", uploadError);
+      return;
+    }
+
+    const { data, error } = supabase.storage.from("users profile").getPublicUrl(filePath);
+    if (error) {
+      console.error("public URL 가져오기 에러:", error);
+      return;
+    }
+    return data.publicUrl;
   };
 
   // 수정 버튼 핸들러
   const toggleEdit = async (e) => {
     e.preventDefault();
     if (isEdit) {
+      // 프로필 이미지가 변경되었으면 업로드 진행
+      let imageUrl = editableUserInfo.profile_image; // 기존 URL 유지
+      if (profileImg) {
+        const uploadedUrl = await uploadFileAndGetUrl();
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl;
+        }
+      }
+      // 업데이트할 데이터에 새로운 이미지 URL 반영
+      const updatedData = {
+        ...editableUserInfo,
+        profile_image: imageUrl
+      };
+
       // 수정 완료 시 사용자 정보 업데이트
       const { data: authUser, error: authError } = await supabase.auth.getUser();
       if (authError || !authUser?.user) {
@@ -53,7 +87,7 @@ const Mypage = () => {
         return;
       }
       const userId = authUser.user.id;
-      updateUserInfo({ userId, updatedData: editableUserInfo });
+      updateUserInfo({ userId, updatedData });
     }
     setIsEdit((prev) => !prev);
   };
@@ -81,13 +115,9 @@ const Mypage = () => {
             <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
             <ContentBox>
               <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
-                <img
-                  src={profileImg || "/path/to/default/image.jpg"}
-                  className="w-full h-full object-cover"
-                  alt="프로필"
-                />
+                <img src={previewImg || userInfo.profile_image} className="w-full h-full object-cover" alt="프로필" />
               </div>
-              {isEdit && <Input type="file" accept="image/*" onChange={handleProfileImgChange} />}
+              {isEdit && <Input id="fileUpload" type="file" onChange={handleProfileImgChange} />}
               <Input
                 type="text"
                 placeholder="이름"

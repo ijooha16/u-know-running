@@ -1,117 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import ContentBox from "../components/common/ContentBox";
 import supabase from "../services/supabase";
 import ContentLayout from "../components/layout/ContentLayout";
-import CafeCard from "../components/CafeCard";
+import { useUserInfo } from "../tanstack/queries/useUserInfo";
+import useUserStore from "../stores/useUserStore";
 
 const Mypage = () => {
-  // 프로필 이미지 상태 관리
-  const [profileImg, setProfileImg] = useState(null);
-  // 프로필 수정 여부 관리 (수정/수정 완료 버튼 토글)
-  const [isEdit, setIsEdit] = useState(false);
-  // 사용자 정보 상태 (이름, mbti, 성별, 이메일)
-  const [userInfo, setUserInfo] = useState({
-    name: "",
-    mbti: "",
-    gender: "",
-    email: ""
-  });
-  // 북마크, 태그 탭 전환 상태
-  const [conversionTab, setConversionTab] = useState("bookmark");
-  const [bookmarkedCafes, setBookmarkedCafes] = useState([]);
-  // const { cafes } = useCafeStore(); // 카페 데이터를 가져오는 스토어
+  const [profileImg, setProfileImg] = useState(null); // 프로필 이미지 상태 관리
+  const [isEdit, setIsEdit] = useState(false); // 프로필 수정 여부 관리 (수정/수정 완료 버튼 토글)
+  const [conversionTab, setConversionTab] = useState("bookmark"); // 북마크 / 태그 탭 전환
+  const { userData, setUserData } = useUserStore();
+  const { data: userInfo, isLoading: userLoading, isError: userError } = useUserInfo(); // 사용자 정보 가져오기
+  const [editableUserInfo, setEditableUserInfo] = useState(userInfo); // 수정 가능한 사용자 정보 상태
 
-  // 컴포넌트 마운트 시 사용자 정보 가져오기
   useEffect(() => {
-    const fetchUser = async () => {
-      // 로그인된 사용자 정보 가져오기
-      const { data: authUser, error: authError } = await supabase.auth.getUser();
-      if (authError || !authUser?.user) {
-        console.error("로그인된 사용자를 가져오는 데 실패했습니다.", authError);
-        return;
-      }
-
-      const userId = authUser.user.id;
-      console.log("userId:", userId); // userId 확인
-
-      // 'users' 테이블에서 해당 사용자 정보 가져오기
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .select("nickname, mbti, gender, email")
-        .eq("users_uid", userId) // 유저 아이디로 필터링
-        .single(); // .single()을 사용하여 하나의 객체만 반환
-
-      if (userError) {
-        console.error("사용자 정보를 가져오는 데 실패했습니다.", userError.message);
-        return;
-      }
-
-      if (userData) {
-        // 사용자 정보를 state에 저장
-        setUserInfo({
-          nickname: userData.nickname || "",
-          mbti: userData.mbti || "미등록", // 없으면 기본값 '미등록' 표시
-          gender: userData.gender || "미등록", // 없으면 기본값 '미등록' 표시
-          email: userData.email || ""
-        });
-      } else {
-        console.error("사용자 정보가 없습니다.");
-      }
-    };
-
-    fetchUser(); // 사용자 정보 가져오기 실행
-  }, []);
-
-  const fetchBookmarkedCafes = async (userId) => {
-    const { data: bookmarkData, error: bookmarkError } = await supabase
-      .from("bookmarks")
-      .select("cafe_id")
-      .eq("users_uid", userId);
-
-    if (bookmarkError) {
-      console.error("북마크된 카페를 가져오는 데 실패했습니다.", bookmarkError.message);
-      return;
+    if (userInfo) {
+      setProfileImg(userInfo.profile_image); // 프로필 이미지 설정
+      setEditableUserInfo(userInfo); // userInfo 변경 시 수정 가능한 정보 업데이트
     }
-
-    // 북마크된 카페 id로 카페 정보 가져오기
-    const cafeIds = bookmarkData.map((bookmark) => bookmark.cafe_id);
-    const { data: cafesData, error: cafesError } = await supabase.from("bookmarks").select("*").in("id", cafeIds);
-
-    if (cafesError) {
-      console.error("카페 정보를 가져오는 데 실패했습니다.", cafesError.message);
-      return;
-    }
-
-    setBookmarkedCafes(cafesData); // 상태에 북마크된 카페 목록 저장
-  };
-
-  // 컴포넌트 마운트 시 로그인한 사용자 정보와 북마크된 카페 목록 가져오기
-  useEffect(() => {
-    const fetchUserAndBookmarks = async () => {
-      const { data: authUser, error: authError } = await supabase.auth.getUser();
-      if (authError || !authUser?.user) {
-        console.error("로그인된 사용자를 가져오는 데 실패했습니다.", authError);
-        return;
-      }
-
-      const userId = authUser.user.id;
-      await fetchBookmarkedCafes(userId);
-    };
-
-    fetchUserAndBookmarks();
-  }, []);
+  }, [userInfo]);
 
   // 프로필 이미지 변경 핸들러
   const handleProfileImgChange = (e) => {
-    const file = e.target.files[0]; // 파일 선택
+    const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImg(reader.result); // 이미지 읽어오기 완료 후 state 업데이트
       };
-      reader.readAsDataURL(file); // 이미지를 data URL로 읽기
+      reader.readAsDataURL(file);
     }
   };
 
@@ -119,7 +38,6 @@ const Mypage = () => {
   const toggleEdit = async (e) => {
     e.preventDefault();
     if (isEdit) {
-      // 수정 완료 클릭 시, 변경된 데이터를 Supabase에 저장
       const { data: authUser, error: authError } = await supabase.auth.getUser();
       if (authError || !authUser?.user) {
         console.error("로그인된 사용자를 가져오는 데 실패했습니다.", authError);
@@ -132,10 +50,10 @@ const Mypage = () => {
       const { error: updateError } = await supabase
         .from("users")
         .update({
-          nickname: userInfo.nickname,
-          mbti: userInfo.mbti,
-          gender: userInfo.gender,
-          email: userInfo.email
+          nickname: editableUserInfo.nickname,
+          mbti: editableUserInfo.mbti,
+          gender: editableUserInfo.gender,
+          email: editableUserInfo.email
         })
         .eq("users_uid", userId);
 
@@ -146,11 +64,10 @@ const Mypage = () => {
       }
     }
 
-    // 수정 상태 토글 (수정하기 / 수정 완료)
-    setIsEdit((prev) => !prev);
+    setIsEdit((prev) => !prev); // 수정 모드 토글
   };
 
-  // 탭 변경 핸들러 (북마크, 태그 탭 전환)
+  // 탭 변경 핸들러
   const handleTab = (tab) => {
     setConversionTab(tab);
   };
@@ -164,24 +81,24 @@ const Mypage = () => {
             <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
             <ContentBox>
               <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
-                {/* 프로필 이미지 표시 (없으면 기본 이미지 사용) */}
+                {/* 프로필 이미지 표시 */}
                 <img
-                  src={profileImg || null} // 프로필 이미지가 없으면 기본 이미지 사용
+                  src={profileImg || "/path/to/default/image.jpg"} // 프로필 이미지 없으면 기본 이미지
                   className="w-full h-full object-cover"
                 />
               </div>
               <Input
                 type="file"
                 accept="image/*"
-                onChange={handleProfileImgChange} // 이미지 변경 핸들러 연결
+                onChange={handleProfileImgChange}
                 className={`${isEdit ? "block" : "hidden"}`} // 수정 모드에서만 이미지 변경 가능
               />
               {/* 이름 입력 */}
               <Input
                 type="text"
                 placeholder="이름"
-                value={userInfo.nickname || ""} // 닉네임 값 반영
-                onChange={(e) => setUserInfo({ ...userInfo, nickname: e.target.value })} // 수정 시 닉네임 업데이트
+                value={editableUserInfo?.nickname || ""} // 수정 가능한 상태에서 닉네임 값 반영
+                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, nickname: e.target.value })}
                 className="border"
                 disabled={!isEdit} // 수정 모드일 때만 입력 가능
               />
@@ -191,29 +108,29 @@ const Mypage = () => {
               <Input
                 type="text"
                 placeholder="MBTI"
-                value={userInfo.mbti || ""} // MBTI 값 반영
-                onChange={(e) => setUserInfo({ ...userInfo, mbti: e.target.value })} // 수정 시 MBTI 업데이트
+                value={editableUserInfo?.mbti || ""}
+                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, mbti: e.target.value })}
                 className="border mb-4"
-                disabled={!isEdit} // 수정 모드일 때만 입력 가능
+                disabled={!isEdit}
               />
               <Input
                 type="text"
                 placeholder="Gender"
-                value={userInfo.gender || ""} // 성별 값 반영
-                onChange={(e) => setUserInfo({ ...userInfo, gender: e.target.value })} // 수정 시 성별 업데이트
+                value={editableUserInfo?.gender || ""}
+                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, gender: e.target.value })}
                 className="border mb-4"
-                disabled={!isEdit} // 수정 모드일 때만 입력 가능
+                disabled={!isEdit}
               />
               <Input
                 type="email"
                 placeholder="test@google.com"
-                value={userInfo.email || ""} // 이메일 값 반영
-                onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })} // 수정 시 이메일 업데이트
+                value={editableUserInfo?.email || ""}
+                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, email: e.target.value })}
                 className="border mb-4"
-                disabled={!isEdit} // 수정 모드일 때만 입력 가능
+                disabled={!isEdit}
               />
             </ContentBox>
-            {/* 수정 버튼: 수정하기 / 수정 완료 */}
+            {/* 수정 버튼 */}
             <Button type="Button" onClick={toggleEdit} text={isEdit ? "수정 완료" : "수정하기"} />
           </div>
         </form>
@@ -221,7 +138,6 @@ const Mypage = () => {
         {/* 오른쪽 영역: 북마크된 콘텐츠 및 조건부 랜더링 */}
         <div className="flex flex-col gap-[30px] justify-start items-center">
           <div className="flex items-center gap-6">
-            {/* 탭 버튼: 북마크 / 태그 */}
             <button
               type="button"
               onClick={() => handleTab("bookmark")}
@@ -238,20 +154,13 @@ const Mypage = () => {
             </button>
           </div>
           <div className="w-[630px] bg-white p-6 rounded-lg shadow-lg">
-            {/* 북마크 탭일 경우 콘텐츠 표시 */}
             {conversionTab === "bookmark" ? (
               <div className="grid grid-cols-2 gap-4">
-                {bookmarkedCafes.length > 0 ? (
-                  bookmarkedCafes.map((cafe) => <CafeCard key={cafe.id} cafe={cafe} />)
-                ) : (
-                  <p>북마크된 카페가 없습니다.</p>
-                )}
+                <p>북마크된 카페가 없습니다.</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                {/* 태그 관련 콘텐츠 */}
-                <p>태그1</p>
-                <p>태그1</p>
+                <p>태그가 없습니다.</p>
               </div>
             )}
           </div>

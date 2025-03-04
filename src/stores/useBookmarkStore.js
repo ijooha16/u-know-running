@@ -1,3 +1,4 @@
+// 미사용 스토어 - 그래도 임시로 둬야 합니다.
 import { create } from "zustand";
 import supabase from "../services/supabase";
 

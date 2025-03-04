@@ -65,7 +65,7 @@ const CafeResultsList = () => {
       {position && (
         <div>
           {/* 태그 */}
-          <div className="flex flex-row items-center p-5 gap-5 w-[960px] overflow-x-auto whitespace-nowrap [&>*]:hover:cursor-pointer mb-10">
+          <div className="flex flex-row items-center p-5 gap-5 w-[960px] overflow-x-auto whitespace-nowrap [&>*]:hover:cursor-pointer [&>*]:bg-[#191971] [&>*]:text-white [&>*]:checked:bg-red-300 mb-10">
             {Object.entries(CafeTagTypes).map(([key, value], index) => (
               <Tag key={key} tagText={value} isSelected={selected === index} onClick={() => handleSelectTag(index)} />
             ))}

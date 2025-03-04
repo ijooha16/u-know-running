@@ -2,8 +2,8 @@ const Tag = ({ tagText, onClick, isSelected }) => {
   return (
     <div
       onClick={onClick}
-      className={`flex items-center h-[30px] px-[16px] bg-[#dcdcdc] text-[14px] text-darkgray rounded-full ${
-        isSelected ? "bg-[#191971]" : "bg-lightgray"
+      className={`flex items-center h-[30px] px-[16px] bg-lightgray text-[14px] text-darkgray rounded-full ${
+        isSelected ? "bg-primary" : "bg-lightgray"
       }`}
     >
       # {tagText}

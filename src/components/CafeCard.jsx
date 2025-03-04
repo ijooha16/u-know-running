@@ -4,27 +4,6 @@ import MainTag from "./common/MainTag";
 import supabase from "../services/supabase";
 
 const CafeCard = () => {
-  const cafes = [
-    {
-      id: "00000000-0000-0000-0000-000000000001", // 예시 cafe_id 1
-      place_name: "컴포즈 커피 부천점",
-      address_name: "여월동 사단지 어쩌고 길주로",
-      road_address_name: "d"
-    },
-    {
-      id: "00000000-0000-0000-0000-000000000002", // 예시 cafe_id 2
-      place_name: "카페 드롭탑 부천점",
-      address_name: "부천로 123",
-      road_address_name: "e"
-    },
-    {
-      id: "00000000-0000-0000-0000-000000000003", // 예시 cafe_id 3
-      place_name: "스타벅스 부천점",
-      address_name: "여월로 456",
-      road_address_name: "f"
-    }
-  ];
-
   const [bookmarkedCafes, setBookmarkedCafes] = useState({});
 
   // 로그인한 사용자 정보 가져오기

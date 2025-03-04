@@ -13,6 +13,8 @@ const MyTag = () => {
   const { userData } = useUserStore();
   const { mutate: upsertTag } = useUpsertTagMutation();
   const { data: cafeData } = useGetCafeTagQuery();
+  const filteredCafeTag = cafeData?.filter(data => data.user_uid === userData.user_metadata.sub)
+  console.log(filteredCafeTag)
 
   return (
     <>
@@ -20,7 +22,7 @@ const MyTag = () => {
         onClick={() => setShowOptions(true)}
         className="flex items-center h-[40px] px-[16px] border-[3px] bg-[#ffffff36] border-[#ffffffac] font-medium rounded-full"
       >
-        # {cafeData?.length > 0 ? cafeData.map((cafe) => cafe.tag_type) : "태그를 선택해주세요"}
+        # {filteredCafeTag?.length > 0 ? filteredCafeTag[0].tag_type : "태그를 선택해주세요"}
       </div>
 
       {showOptions && (

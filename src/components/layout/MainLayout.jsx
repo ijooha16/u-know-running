@@ -1,8 +1,7 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import { ToastContainer } from "react-toastify";
-import Button from "../common/Button";
 
 const Layout = () => {
   return (

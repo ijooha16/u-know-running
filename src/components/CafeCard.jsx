@@ -36,7 +36,7 @@ const CafeCard = ({ cafe, cafeKey }) => {
     if (cafeId) {
       fetchTags();
     }
-  }, [cafeId]); // cafeId가 변경될 때마다 태그를 가져옵니다.
+  }, [cafeId]);  // cafeId가 변경될 때마다 태그를 가져옵니다.
 
   useEffect(() => {
     const fetchInitialBookmarkStatus = async () => {
@@ -58,6 +58,7 @@ const CafeCard = ({ cafe, cafeKey }) => {
     return null; // cafe가 없으면 아무것도 렌더링하지 않음
   }
 
+
   // 로그인한 사용자 정보 가져오기
   const fetchUser = async () => {
     const { data: authUser, error: authError } = await supabase.auth.getUser();
@@ -67,6 +68,7 @@ const CafeCard = ({ cafe, cafeKey }) => {
     }
     return authUser.user.id;
   };
+
 
   // 북마크 상태 확인
   const checkIfBookmarked = async (userId, cafeId) => {
@@ -79,6 +81,7 @@ const CafeCard = ({ cafe, cafeKey }) => {
 
     return data.length > 0; // 데이터가 하나라도 있으면 북마크 상태
   };
+  
 
   // 북마크 추가/제거 핸들러
   const handleBookmark = async (cafeId) => {
@@ -107,13 +110,10 @@ const CafeCard = ({ cafe, cafeKey }) => {
   };
 
   return (
-    <div
-      key={cafeKey}
-      className={`shadow bg-[url(https://www.thinkfood.co.kr/news/photo/202007/88177_114044_267.jpg)] h-auto w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px]`}
-    >
-      <div className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] w-full flex flex-col justify-end items-start p-[20px_16px] rounded-[20px]">
-        <img src={image} className="w-full h-full object-cover" />
-        <div className="flex justify-between w-full items-center pr-[12px]">
+    <div key={cafeKey} className={`shadow bg-[url(https://www.thinkfood.co.kr/news/photo/202007/88177_114044_267.jpg)] h-auto w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px] overflow-hidden relative`}>
+      <img src={image} alt="카페 이미지" className="absolute h-auto w-[300px]"/>
+      <div className="z-0 bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] w-full flex flex-col justify-end items-start p-[20px_16px] rounded-[20px]">
+        <div className="z-0 flex justify-between w-full items-center pr-[12px] whitespace-nowrap ">
           {/* <MainTag tagText="혼자 공부하기 좋은" /> */}
           {tags.length > 0 ? (
             tags.map((tag, index) => <MainTag key={index} tagText={tag} />)
@@ -126,8 +126,8 @@ const CafeCard = ({ cafe, cafeKey }) => {
             className={`${bookmarkedCafes[cafe.id] ? "text-yellow-500" : "text-white"} cursor-pointer`}
           />
         </div>
-        <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
-        <div className="text-lightgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
+        <div className="z-0 font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
+        <div className="z-0 text-lightgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
       </div>
     </div>
   );

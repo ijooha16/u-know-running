@@ -3,13 +3,16 @@ import profileIcon from "../../assets/icons/icon_profile.png";
 import bookMarkIcon from "../../assets/icons/icon_bookmark.png";
 import closeIcon from "../../assets/icons/icon_close.png";
 import hamburgerIconWhite from "../../assets/icons/icon_hamburger_white.png";
-import sendIcon from '../../assets/icons/icon_send.png'
+import sendIcon from "../../assets/icons/icon_send.png";
+import deleteIcon from "../../assets/icons/icon_delete.png";
+import editIcon from "../../assets/icons/icon_edit.png";
+import checkIcon from "../../assets/icons/icon_check.png"
 
 //아이콘 import 해주기
 //iconSrc 객체 안에 키-값(아이콘변수명) 넣어주기
 //쓸 컴포넌트로 가서 iconSrc='키'
 
-const Icon = ({ icon, className, onClick }) => {
+const Icon = ({ icon, small, onClick, className }) => {
   const iconSrc = {
     bookMark: bookMarkIcon,
     hamburger: hamburgerIcon,
@@ -17,11 +20,12 @@ const Icon = ({ icon, className, onClick }) => {
     close: closeIcon,
     hamburger_white: hamburgerIconWhite,
     send: sendIcon,
+    delete: deleteIcon,
+    edit: editIcon,
+    check: checkIcon,
   };
 
-  return (
-    <img src={iconSrc[icon]} alt={`${icon} icon`} className={`w-[32px] h-[32px] ${className}`} onClick={onClick} />
-  );
+  return <img src={iconSrc[icon]} alt={`${icon} icon`} className={`${className} ${small ? 'w-[24px] h-[24px]' : 'w-[32px] h-[32px]'}`} onClick={onClick} />;
 };
 
 export default Icon;

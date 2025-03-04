@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import Icon from "./common/Icon";
 import MainTag from "./common/MainTag";
 import supabase from "../services/supabase";
-import { getCafeTopTags } from "../services/tag";  // getCafeTopTags 함수 가져오기
+import { getCafeTopTags } from "../services/tag"; // getCafeTopTags 함수 가져오기
 import { fetchNaverImage } from "../services/naverimage";
 
-const CafeCard = ({cafe, cafeKey}) => {
-
+const CafeCard = ({ cafe, cafeKey }) => {
   const { place_name, address_name, road_address_name, id: cafeId } = cafe;
   const [tags, setTags] = useState([]); // 태그 상태
   const [image, setImage] = useState("");
@@ -24,23 +23,20 @@ const CafeCard = ({cafe, cafeKey}) => {
 
   const [bookmarkedCafes, setBookmarkedCafes] = useState({});
 
-
-
-  
   useEffect(() => {
     // 카페의 ID에 맞는 태그를 가져오기
     const fetchTags = async () => {
       try {
         const topTags = await getCafeTopTags(cafeId);
-        setTags(topTags.map(tag => tag.tag));  // 상위 4개의 태그만 사용
+        setTags(topTags.map((tag) => tag.tag)); // 상위 4개의 태그만 사용
       } catch (error) {
         console.error("태그 가져오기 오류:", error);
       }
-    };    
+    };
     if (cafeId) {
       fetchTags();
     }
-  }, [cafeId]);  // cafeId가 변경될 때마다 태그를 가져옵니다.
+  }, [cafeId]); // cafeId가 변경될 때마다 태그를 가져옵니다.
 
   useEffect(() => {
     const fetchInitialBookmarkStatus = async () => {
@@ -110,12 +106,13 @@ const CafeCard = ({cafe, cafeKey}) => {
     }
   };
 
-  
-
   return (
-    <div key={cafeKey} className={`shadow bg-[url(https://www.thinkfood.co.kr/news/photo/202007/88177_114044_267.jpg)] h-auto w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px]`}>
+    <div
+      key={cafeKey}
+      className={`shadow bg-[url(https://www.thinkfood.co.kr/news/photo/202007/88177_114044_267.jpg)] h-auto w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px]`}
+    >
       <div className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] w-full flex flex-col justify-end items-start p-[20px_16px] rounded-[20px]">
-        <img src={image} className="w-full h-full object-cover"/>
+        <img src={image} className="w-full h-full object-cover" />
         <div className="flex justify-between w-full items-center pr-[12px]">
           {/* <MainTag tagText="혼자 공부하기 좋은" /> */}
           {tags.length > 0 ? (
@@ -136,5 +133,5 @@ const CafeCard = ({cafe, cafeKey}) => {
   );
 };
 
-
 export default CafeCard;
+

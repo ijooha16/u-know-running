@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import ContentBox from "../components/common/ContentBox";
-// import axios from "axios";
 import supabase from "../services/supabase";
 import ContentLayout from "../components/layout/ContentLayout";
-// import CafeCard from "../components/CafeCard";
-import useCafeStore from "../stores/useCafeStore";
+import CafeCard from "../components/CafeCard";
 
 const Mypage = () => {
   // 프로필 이미지 상태 관리
@@ -79,7 +77,7 @@ const Mypage = () => {
 
     // 북마크된 카페 id로 카페 정보 가져오기
     const cafeIds = bookmarkData.map((bookmark) => bookmark.cafe_id);
-    const { data: cafesData, error: cafesError } = await supabase.from("cafeCards").select("*").in("id", cafeIds);
+    const { data: cafesData, error: cafesError } = await supabase.from("bookmarks").select("*").in("id", cafeIds);
 
     if (cafesError) {
       console.error("카페 정보를 가져오는 데 실패했습니다.", cafesError.message);

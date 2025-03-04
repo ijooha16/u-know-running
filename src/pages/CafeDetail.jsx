@@ -7,8 +7,8 @@ import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
 import ContentLayout from "../components/layout/ContentLayout";
-// import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
-// import { useGetImage } from "../tanstack/queries/useGetImage";
+import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
+import { useGetImage } from "../tanstack/queries/useGetImage";
 import supabase from "../services/supabase";
 
 const CafeDetail = () => {
@@ -125,7 +125,7 @@ const CafeDetail = () => {
       <ContentLayout>
         <Modal>
           <div className="flex gap-[30px]">
-            <div className="min-h-[320px]">
+            <div className="flex flex-wrap max-w-[500px] min-h-[320px]">
               {naverImage &&
                 naverImage.map((image, idx) => {
                   if (idx >= 5) return;
@@ -170,9 +170,3 @@ const CafeDetail = () => {
 };
 
 export default CafeDetail;
-
-const Img = ({ img }) => {
-  const [isLoaded, setIsLoaded] = useState(true);
-
-  return isLoaded ? <img src={img} alt="이미지가 없습니다" onError={() => setIsLoaded(false)} /> : null;
-};

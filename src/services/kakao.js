@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export const searchCafes = async (lat, lng, radius = 3000) => {
+export const searchCafes = async (lat, lng, radius = 20000) => {
   try {
     if (!window.kakao || !window.kakao.maps) {
       throw new Error("카카오 지도 API가 로드되지 않았습니다.");

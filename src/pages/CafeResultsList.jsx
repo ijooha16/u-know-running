@@ -6,8 +6,12 @@ import useCafeStore from "../stores/useCafeStore";
 import useGetCafes from "../tanstack/queries/useGetCafes";
 import useGetLocation from "../tanstack/queries/useGetLocation";
 import { useKakaoLoader } from "react-kakao-maps-sdk";
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import supabase from "../services/supabase";
+=======
+import { useState } from "react";
+>>>>>>> df76c1d (fix: 디테일 수정....)
 
 const CafeResultsList = () => {
   const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
@@ -60,18 +64,55 @@ const CafeResultsList = () => {
   if (loading || isLocationLoading || isCafesLoading) return <p>카페 로딩 중...</p>;
   if (locationError || cafesError || loadError) return <p>카페 로딩 오류 발생</p>;
 
+<<<<<<< HEAD
+=======
+  //cafes 들어오는지, cafe들어오는지, selected 들어오는지,
+
+  const filteredCafes = cafes.filter((cafe) => {
+    if (selected === null) return true;
+
+    // MainTag가 존재하고 tagText 속성이 있을 때만 접근 (삭제하면 둘 중 하나 값이 undefined일 때 오류가 남)
+    if (cafe.MainTag && cafe.MainTag.tagText) {
+      console.log("cafe.Maintag까지 ==> ", cafe.MainTag);
+      console.log("cafe.Maintag.tagtest까지 ==> ", cafe.MainTag.tagText);
+      console.log("CafeTagTypes[selected]", CafeTagTypes[selected]);
+      return cafe.MainTag.tagText === CafeTagTypes[selected];
+    }
+    return false;
+  });
+
+  console.log("this is selected tag ==> ", selected);
+
+  const handleSelectTag = (index) => {
+    if (selected === index) {
+      // 이미 선택된 태그를 다시 클릭하면 선택 취소
+      setSelected(null);
+    } else {
+      // 선택되지 않은 태그를 클릭하면 해당 태그 선택
+      setSelected(index);
+    }
+  };
+
+>>>>>>> df76c1d (fix: 디테일 수정....)
   return (
     <ContentLayout>
       {position && (
         <div>
           {/* 태그 */}
+<<<<<<< HEAD
           <div className="grid grid-cols-5 items-center p-5 gap-5 w-[1000px] whitespace-nowrap [&>*]:hover:cursor-pointer [&>/]:active:bg-orange-600 [&>*]:bg-[#191971] [&>*]:text-white mb-10 [&>*]:text-[11px] justify-i">
             {Object.entries(CafeTagTypes).map(([key, value], index) => (
               <Tag key={key} tagText={value} isSelected={selected === index} onClick={() => handleSelectTag(index)} className="checked:bg-red-400"/>
+=======
+          <div className="flex flex-row items-center p-5 gap-5 w-[960px] overflow-x-auto whitespace-nowrap [&>*]:hover:cursor-pointer mb-10">
+            {Object.entries(CafeTagTypes).map(([key, value], index) => (
+              <Tag key={key} tagText={value} isSelected={selected === index} onClick={() => handleSelectTag(index)} />
+>>>>>>> df76c1d (fix: 디테일 수정....)
             ))}
           </div>
 
           {/* 카페 카드들 */}
+<<<<<<< HEAD
           {filteredCafes.length === 0 ? (
             <p className="flex justify-center items-center">해당 태그를 가진 카페가 없습니다.</p>
           ) : (
@@ -81,6 +122,13 @@ const CafeResultsList = () => {
               ))}
             </div>
           )}
+=======
+          <div className="grid grid-cols-3 gap-[30px] mx-auto w-fit">
+            {filteredCafes.map((cafe) => (
+              <CafeCard key={cafe.id} cafe={cafe} cafeKey={cafe.id} />
+            ))}
+          </div>
+>>>>>>> df76c1d (fix: 디테일 수정....)
         </div>
       )}
     </ContentLayout>
@@ -88,6 +136,7 @@ const CafeResultsList = () => {
 };
 
 export default CafeResultsList;
+<<<<<<< HEAD
 
 
 
@@ -194,3 +243,5 @@ export default CafeResultsList;
 // };
 
 // export default CafeResultsList;
+=======
+>>>>>>> df76c1d (fix: 디테일 수정....)

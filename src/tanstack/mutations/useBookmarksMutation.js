@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import supabase from "../supabaseClient";
+import supabase from "../../services/supabase";
 
 const addBookmark = async ({ users_uid, cafe_id, place_name, road_address_name, address_name, phone, place_url }) => {
   const { error } = await supabase.from("bookmarks").insert([
@@ -40,7 +40,6 @@ export function useToggleBookmark() {
       await queryClient.cancelQueries(["bookmarks", bookmarkData.cafe_id]);
       // 가져오고
       const previousData = queryClient.getQueryData(["bookmarks", bookmarkData.cafe_id]);
-
       // 셋쿼리
       queryClient.setQueryData(["bookmarks", bookmarkData.cafe_id], (old) =>
         bookmarkData.isBookmarked ? [] : [bookmarkData]

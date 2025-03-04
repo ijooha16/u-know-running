@@ -67,10 +67,7 @@ const CafeDetail = () => {
   if (bookmarkError) return <div>북마크 불러오기 실패</div>;
 
   return (
-    <div
-      onClick={() => setSelectedCafe(null)}
-      className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
-    >
+    <div onClick={() => setSelectedCafe(null)}>
       <ContentLayout>
         <Modal>
           <div className="flex gap-[30px]">
@@ -99,18 +96,29 @@ const CafeDetail = () => {
                   <div className="text-darkgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
                   <div className="text-darkgray text-[14px] pl-[12px]">{phone || "번호없음"}</div>
                 </div>
-                <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
-                  {tagList?.map((tag, idx) => {
-                    if (idx === 0) return null;
-                    return <Tag key={tag.tag} tagText={`${tag.tag} - ${tag.count}`} />;
-                  })}
+                <div className="font-semibold text-[26px] pl-[12px]">{place_name || "이름없음"}</div>
+                <a
+                  href={place_url}
+                  target="_blank"
+                  className="text-primary text-[14px] pl-[12px] pr-[20px] hover:text-[#4938ff]"
+                >
+                  웹사이트 바로가기
+                </a>
+                <div className="text-darkgray text-[14px] pl-[12px]">
+                  {address_name || road_address_name}
+                  <br />
+                  {phone || "번호없음"}
                 </div>
-                <MyTag />
+                {tagList?.map((tag, idx) => {
+                  if (idx === 0) return null;
+                  return <Tag key={tag.tag} tagText={`${tag.tag} - ${tag.count}`} />;
+                })}
               </div>
-              <a href={place_url} target="_blank" rel="noopener noreferrer">
-                <Button text="웹사이트 바로가기" />
-              </a>
+              <div className="flex items-center text-white rounded-[20px] bg-[#1919707f] w-full justify-center p-[10px]">
+                나는 이곳이 &nbsp; <MyTag /> &nbsp; 카페라고 생각해요
+              </div>
             </div>
+            <CommentBox />
           </div>
         </Modal>
       </ContentLayout>
@@ -119,3 +127,29 @@ const CafeDetail = () => {
 };
 
 export default CafeDetail;
+
+const ModalImage = () => {
+  const { selectedCafe } = useCafeStore();
+  const { place_name } = selectedCafe;
+  const { data: naverImage, isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
+
+  if (isImageLoading) return <div>이미지 불러오는 중..</div>;
+  if (imageError) return <div>이미지 불러오기 실패</div>;
+
+  return (
+    <div className="flex flex-wrap">
+      {naverImage &&
+        naverImage.map((image, idx) => {
+          if (idx >= 3) return;
+          return (
+            <img
+              key={image.link}
+              src={image.thumbnail}
+              alt=""
+              onError="this.onerror=null; this.src=''; this.style.display='none'"
+            />
+          );
+        })}
+    </div>
+  );
+};

@@ -5,7 +5,7 @@ const Button = ({ icon, type, onClick, text, className }) => {
     <button
       type={type}
       onClick={onClick}
-      className={`bg-[#191970] flex items-center gap-4 font-semibold text-white h-[50px] px-[30px] rounded-full z-50 ${className}`}
+      className={`bg-primary flex items-center gap-4 font-semibold text-white h-[50px] px-[30px] rounded-full z-50 ${className}`}
     >
       {icon && <Icon icon={icon} />} 
       {text}

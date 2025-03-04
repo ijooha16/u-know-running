@@ -97,7 +97,7 @@ const CafeDetail = () => {
                 })}
               </div>
               <div className="flex items-center text-white rounded-[20px] bg-[#1919707f] w-full justify-center p-[10px]">
-                나는 이곳이 &nbsp; <MyTag /> &nbsp; 카페라고 생각해요
+                {`${place_name}`}&nbsp; 카페는 &nbsp; <MyTag /> &nbsp; 곳이라 좋아요
               </div>
             </div>
             <CommentBox />

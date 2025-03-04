@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import supabase from "../../services/supabase";
 import useUserStore from "../../stores/useUserStore";
+import { ErrorMessage } from "../../data/toastMessages";
 
 const Header = () => {
   const { userData } = useUserStore();
@@ -9,7 +10,7 @@ const Header = () => {
   const onLogoutHandler = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      return toast.error("로그아웃 에러: " + error);
+      return toast.error(ErrorMessage.failLogout + error);
     }
 
     window.localStorage.removeItem("user-data");

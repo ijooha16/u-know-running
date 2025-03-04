@@ -7,6 +7,7 @@ import supabase from "../services/supabase";
 import useUserStore from "../stores/useUserStore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ErrorMessage } from "../data/toastMessages";
 
 const Splash = () => {
   const { userData } = useUserStore();
@@ -37,7 +38,7 @@ const Splash = () => {
   const nextPage = () => {
     if (page === 2) {
       if (!isValidMbti(mbti)) {
-        toast.error("유효한 mbti 형식을 입력해 주세요.");
+        toast.error(ErrorMessage.invalidMbti);
         return;
       }
       setMbti(mbti.toUpperCase());

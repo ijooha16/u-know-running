@@ -12,7 +12,7 @@ export const useCreateCommentMutation = () => {
       createComment({ cafe_id, cafe_name, comments, user_uid, nickname }),
     onSuccess: (data) => {
       console.log(data, "댓글 추가 성공");
-      queryClient.invalidateQueries(QUERY_KEYS.COMMENTS)
+      queryClient.invalidateQueries(QUERY_KEYS.COMMENTS);
       toast.success(SuccessMessage.createComment);
     }
   });
@@ -24,7 +24,7 @@ export const useUpdateCommentMutation = () => {
     mutationFn: updateComment,
     onSuccess: (data) => {
       console.log(data);
-      toast.success("댓글 수정 성공!");
+      toast.success(SuccessMessage.editComment);
       queryClient.invalidateQueries(QUERY_KEYS.COMMENTS);
     },
     onError: (error) => {
@@ -40,7 +40,7 @@ export const useDeleteCommentMutation = () => {
     mutationFn: deleteComment,
     onSuccess: (data) => {
       console.log(data, "삭제 성공");
-      toast.success("댓글 삭제 성공!");
+      toast.success(SuccessMessage.deleteComment);
       queryClient.invalidateQueries(QUERY_KEYS.COMMENTS);
     },
     onError: (error) => {

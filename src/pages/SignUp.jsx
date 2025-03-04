@@ -4,15 +4,21 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ContentBox from "../components/common/ContentBox";
 import useUserStore from "../stores/useUserStore";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const { setUserData } = useUserStore;
 
   const onSignupHandler = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error('비밀번호가 일치하지 않습니다')
+    }
 
     //수파베이스에 있는 회원가입 함수
     const { data,error } = await supabase.auth.signUp({
@@ -37,6 +43,7 @@ const SignUp = () => {
       <ContentBox>
         <Input placeholder="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input placeholder="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Input placeholder="confirm password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
         <Input placeholder="nickname" type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
         <Button text="회원가입" />
       </ContentBox>

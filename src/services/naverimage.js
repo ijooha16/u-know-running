@@ -4,7 +4,7 @@ export const fetchNaverImage = async (place_name) => {
     const response = await fetch(`/api/naver-image?query=${place_name}`);
     const data = await response.json();
     if (data.items && data.items.length > 0) {
-      return data.items[0].thumbnail;
+      return data?.items;
     }
     return null;
   } catch (error) {

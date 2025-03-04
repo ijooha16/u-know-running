@@ -6,13 +6,20 @@ export const getComments = async() =>{
     if (error) throw error
 }
 
-export const updateComment = async( cafe_id, cafe_name, comments, user_uid ) =>{
+export const creatComment = async( cafe_id, cafe_name, comments, user_uid ) =>{
     const { data,error } = await supabase.from('comments').insert([{
         cafe_id,
         cafe_name,
         comments,
         user_uid
     }])
+    if (error) throw error
+}
+
+export const updateComment = async( id, comments ) =>{
+    const { data,error } = await supabase.from('comments').update({
+        comments
+    }).eq("id",id).select()
     if (error) throw error
 }
 

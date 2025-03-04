@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { CafeTagTypes } from "../data/CafeTypes";
 import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
@@ -22,7 +22,8 @@ const Splash = () => {
   const [gender, setGender] = useState("");
   const [mbti, setMbti] = useState("");
   const [tags, setTags] = useState([]);
-  const [selected, setSelected] = useState(null); // 성별 선택용 상태
+  const [selected, setSelected] = useState(null); // 성별 선택용 상태; // 선택된 태그들
+  const [clickedTags, setClickedTags] = useState({}); // 개별 태그 클릭 상태
 
   const updateUserInfo = async () => {
     const { error } = await supabase
@@ -63,10 +64,6 @@ const Splash = () => {
     }
   };
 
-  const onTagSelectHandler = (tag) => {
-    setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
-  };
-
   // 성별 체크박스에서 하나만 선택하도록 하는 핸들러
   const handleCheckboxChange = (value) => {
     setSelected(selected === value ? null : value);
@@ -76,6 +73,21 @@ const Splash = () => {
   const isValidMbti = (input) => {
     const mbtiRegex = /^[IENSTFPJ]{4}$/i;
     return mbtiRegex.test(input);
+  };
+
+  // 태그 선택 핸들러
+  const handleSelectedTags = (tag) => {
+    setTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  // 태그 클릭 핸들러 (태그별 border 색상 변경)
+  const handleClickTags = (tag) => {
+    setClickedTags((prev) => ({
+      ...prev,
+      [tag]: !prev[tag],
+    }));
   };
 
   return (
@@ -150,17 +162,20 @@ const Splash = () => {
           </h1>
           <div className="grid grid-cols-5 gap-[30px]">
             {Object.values(CafeTagTypes).map((type) => (
-              <div key={type} className="border-4 w-[220px] h-[150px] flex justify-center items-center rounded-xl shadow-md">
-                <label > {/*className="flex items-center space-x-2 cursor-pointer"*/}
+              <label key={type}> 
+                <div className={`border-4 w-[220px] h-[150px] flex justify-center items-center rounded-xl shadow-md hover:cursor-pointer ${clickedTags[type] ? "border-blue-900" : "border-gray-300"}`}>
                   <input
                     type="checkbox"
                     checked={tags.includes(type)}
-                    onChange={() => onTagSelectHandler(type)}
+                    onChange={() => {
+                      handleSelectedTags(type);
+                      handleClickTags(type);
+                    }}
                     className="w-5 h-5 accent-blue-900 invisible"
                   />
-                  <span className="text-sm font-black">{type}</span>
-                </label>
-              </div>
+                  <span className="text-sm font-black ml-[-15px]">{type}</span>
+                </div>
+              </label>
             ))}
           </div>
           <div>

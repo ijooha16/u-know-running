@@ -6,9 +6,9 @@ import MyTag from "../components/common/MyTag";
 import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
-import { fetchNaverImage } from "../services/naverimage";
 import ContentLayout from "../components/layout/ContentLayout";
-import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
+// import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
+// import { useGetImage } from "../tanstack/queries/useGetImage";
 import supabase from "../services/supabase";
 
 const CafeDetail = () => {
@@ -19,6 +19,7 @@ const CafeDetail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [userData, setUserData] = useState(null); // supabase에서 유저 데이터 관리
   const [isUserLoaded, setIsUserLoaded] = useState(false); // 사용자 로딩 상태 관리
+  const { data: naverImage, isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
 
   useEffect(() => {
     // Supabase에서 현재 로그인된 사용자 정보를 가져옴
@@ -111,8 +112,11 @@ const CafeDetail = () => {
 
   if (!selectedCafe) return null;
 
-  if (isLoading) return <div>태그 로딩중..</div>;
+  if (isLoading) return <div>태그 로딩 중..</div>;
   if (error) return <div>태그 불러오기 실패</div>;
+
+  if (isImageLoading) return <div>이미지 불러오는 중..</div>;
+  if (imageError) return <div>이미지 불러오기 실패</div>;
 
   return (
     <div
@@ -123,7 +127,18 @@ const CafeDetail = () => {
         <Modal>
           <div className="flex gap-[30px]">
             <div className="min-h-[320px]">
-              <img src={image} alt="이미지가 없어요" />
+              {naverImage &&
+                naverImage.map((image, idx) => {
+                  if (idx >= 5) return;
+                  return (
+                    <img
+                      key={image.link}
+                      src={image.thumbnail}
+                      alt=""
+                      onError="this.onerror=null; this.src=''; this.style.display='none'"
+                    />
+                  );
+                })}
             </div>
             <div className="flex flex-col justify-between items-end">
               <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-start">

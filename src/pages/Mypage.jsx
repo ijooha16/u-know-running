@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import ContentBox from "../components/common/ContentBox";
-// import axios from "axios";
 import supabase from "../services/supabase";
 import ContentLayout from "../components/layout/ContentLayout";
-// import CafeCard from "../components/CafeCard";
-import useCafeStore from "../stores/useCafeStore";
 
 const Mypage = () => {
   // 프로필 이미지 상태 관리

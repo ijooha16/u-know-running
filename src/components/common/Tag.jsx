@@ -2,9 +2,9 @@ const Tag = ({ tagText, onClick, isSelected }) => {
   return (
     <div
       onClick={onClick}
-      className={`flex items-center h-[30px] px-[16px] text-[14px] text-darkgray rounded-full ${
-        isSelected && "bg-[#191971]"
-      } bg-white`}
+      className={`flex items-center h-[30px] px-[16px] bg-[#dcdcdc] text-[14px] text-darkgray rounded-full ${
+        isSelected ? "bg-[#191971]" : "bg-lightgray"
+      }`}
     >
       # {tagText}
     </div>

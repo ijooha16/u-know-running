@@ -45,7 +45,14 @@ const CafeDetail = () => {
               {image &&
                 image.map((image, idx) => {
                   if (idx >= 5) return;
-                  return <img key={image.link} src={image.thumbnail} alt='no image' onError="this.style.display='none'" />;
+                  return (
+                    <img
+                      key={image.link}
+                      src={image.thumbnail}
+                      alt=""
+                      onError="this.onerror=null; this.src=''; this.style.display='none'"
+                    />
+                  );
                 })}
             </div>
             <div className="flex flex-col justify-between items-end">

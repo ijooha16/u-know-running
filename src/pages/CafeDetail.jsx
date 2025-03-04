@@ -1,20 +1,59 @@
-import Button from "../components/common/Button";
 import Icon from "../components/common/Icon";
 import MainTag from "../components/common/MainTag";
 import MyTag from "../components/common/MyTag";
 import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
-import { useState } from "react";
 import ContentLayout from "../components/layout/ContentLayout";
 import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 import { useGetImage } from "../tanstack/queries/useGetImage";
+import useUserStore from "../stores/useUserStore";
+import { useBookmarks } from "../tanstack/queries/useBookmarks";
+import { useToggleBookmark } from "../tanstack/mutations/useBookmarksMutation";
+import { toast } from "react-toastify";
+import CommentBox from "../components/comment/CommentBox";
 
 const CafeDetail = () => {
+  // 여기 useCafeStore랑 selectedCafe 위치 절대 바꾸시면 안됩니다!!!
+  // cafe_id 로딩 안되면 모달창 에러뜸.
   const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
+
+  const { userData } = useUserStore();
+
+  const { mutate: toggleBookmark, isLoading: isBookmarkdLoading, error: bookmarkError } = useToggleBookmark();
+  const { data: bookmarkQueryData } = useBookmarks(cafe_id);
+  const isBookmarked = bookmarkQueryData && bookmarkQueryData.length > 0;
+
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
-  const { data: naverImage, isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
+
+  const { isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
+
+  const handleClick = () => {
+    const bookmarkData = {
+      users_uid: userData.id,
+      cafe_id,
+      place_name,
+      road_address_name,
+      address_name,
+      phone,
+      place_url,
+      isBookmarked
+    };
+    toggleBookmark(bookmarkData, {
+      onSuccess: () => {
+        if (isBookmarked) {
+          toast.success("북마크가 해제되었습니다.");
+        } else {
+          toast.success("북마크가 등록되었습니다.");
+        }
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error("북마크 변경에 오류가 있습니다. 다시 시도해 주세요.");
+      }
+    });
+  };
 
   if (!selectedCafe) return null;
 
@@ -24,51 +63,46 @@ const CafeDetail = () => {
   if (isImageLoading) return <div>이미지 불러오는 중..</div>;
   if (imageError) return <div>이미지 불러오기 실패</div>;
 
+  if (isBookmarkdLoading) return <div>북마크 불러오는 중..</div>;
+  if (bookmarkError) return <div>북마크 불러오기 실패</div>;
+
   return (
-    <div
-      onClick={() => setSelectedCafe(null)}
-      className="z-50 fixed flex justify-center top-0 left-0 w-screen h-screen bg-[#000000a8]"
-    >
+    <div onClick={() => setSelectedCafe(null)}>
       <ContentLayout>
         <Modal>
-          <div className="flex gap-[30px]">
-            <div className="flex flex-wrap max-w-[500px] min-h-[320px]">
-              {naverImage &&
-                naverImage.map((image, idx) => {
-                  if (idx >= 5) return;
-                  return (
-                    <img
-                      key={image.link}
-                      src={image.thumbnail}
-                      alt=""
-                      onError="this.onerror=null; this.src=''; this.style.display='none'"
-                    />
-                  );
-                })}
-            </div>
-            <div className="flex flex-col justify-between items-end">
-              <div className="w-[400px] flex flex-col gap-[16px] py-[16px] items-start">
-                <div className="w-full flex flex-col items-start">
-                  <div className="flex justify-between w-full items-center pr-[12px]">
-                    <MainTag tagText={tagList[0]?.tag || "아무 태그도 등록되지 않았어요"} />
-                    <Icon icon="bookMark" />
-                  </div>
-                  <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name || "이름없음"}</div>
-                  <div className="text-darkgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
-                  <div className="text-darkgray text-[14px] pl-[12px]">{phone || "번호없음"}</div>
+          <div className="h-[500px] flex gap-[30px]">
+            <div className="h-full flex flex-col justify-between">
+              <div className="w-auto min-w-[400px] flex flex-col items-start gap-[20px]">
+                <ModalImage />
+                <div className="w-full flex justify-between items-center pr-[16px]">
+                  <MainTag tagText={tagList[0]?.tag || "아무 태그도 등록되지 않았어요"} />
+                  <Icon icon="bookMark" onClick={handleClick} /> {/* 아이콘을 변경하지 않고 그대로 사용 */}
                 </div>
-                <div className="flex gap-[12px] w-full overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <div className="font-semibold text-[26px] pl-[12px]">{place_name || "이름없음"}</div>
+                <a
+                  href={place_url}
+                  target="_blank"
+                  className="text-primary text-[14px] pl-[12px] pr-[20px] hover:text-[#4938ff]"
+                >
+                  웹사이트 바로가기
+                </a>
+                <div className="text-darkgray text-[14px] pl-[12px]">
+                  {address_name || road_address_name}
+                  <br />
+                  {phone || "번호없음"}
+                </div>
+                <div className="w-full flex gap-[12px] overflow-auto">
                   {tagList?.map((tag, idx) => {
                     if (idx === 0) return null;
-                    return <Tag key={tag.tag} tagText={`${tag.tag} - ${tag.count}`} />;
+                    return <Tag key={tag.tag} tagText={tag.tag} />;
                   })}
                 </div>
-                <MyTag />
               </div>
-              <a href={place_url} target="_blank" rel="noopener noreferrer">
-                <Button text="웹사이트 바로가기" />
-              </a>
+              <div className="flex items-center text-white rounded-[20px] bg-secondary w-full justify-center p-[10px_16px]">
+                {`${place_name}`}&nbsp; 카페는 &nbsp; <MyTag /> &nbsp; 곳이라 좋아요!
+              </div>
             </div>
+            <CommentBox />
           </div>
         </Modal>
       </ContentLayout>
@@ -78,8 +112,28 @@ const CafeDetail = () => {
 
 export default CafeDetail;
 
-const Img = ({ img }) => {
-  const [isLoaded, setIsLoaded] = useState(true);
+const ModalImage = () => {
+  const { selectedCafe } = useCafeStore();
+  const { place_name } = selectedCafe;
+  const { data: naverImage, isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
 
-  return isLoaded ? <img src={img} alt="이미지가 없습니다" onError={() => setIsLoaded(false)} /> : null;
+  if (isImageLoading) return <div>이미지 불러오는 중..</div>;
+  if (imageError) return <div>이미지 불러오기 실패</div>;
+
+  return (
+    <div className="flex flex-wrap">
+      {naverImage &&
+        naverImage.map((image, idx) => {
+          if (idx >= 3) return;
+          return (
+            <img
+              key={image.link}
+              src={image.thumbnail}
+              alt=""
+              onError="this.onerror=null; this.src=''; this.style.display='none'"
+            />
+          );
+        })}
+    </div>
+  );
 };

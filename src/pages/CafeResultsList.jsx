@@ -59,9 +59,9 @@ const CafeResultsList = () => {
 
   return (
     <>
-      <div className="flex gap-[90px] min-h-[calc(100vh-420px)] my-[80px]">
+      <div className="flex flex-col gap-[90px] min-h-[calc(100vh-420px)] my-[80px]">
         {/* 태그 */}
-        <div className="w-[300px] flex flex-col items-start justify-start p-5 gap-5">
+        <div className="w-[1000px] flex flex-wrap items-center justify-center p-5 gap-8">
           {Object.entries(CafeTagTypes).map(([key, value], index) => (
             <Tag
               key={key}

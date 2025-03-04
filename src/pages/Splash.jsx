@@ -91,7 +91,7 @@ const Splash = () => {
   };
 
   return (
-    <ContentBox className="w-[100vw] h-[90vh] bg-white flex justify-center items-center">
+    <ContentBox className="min-w-[100vw] h-[90vh] bg-white flex justify-center items-center">
       {page === 0 && (
         <div className="text-center flex flex-col items-center gap-4">
           <h1 className="text-[30px] font-black mb-10 text-center absolute top-24 translate-y-24">
@@ -160,7 +160,7 @@ const Splash = () => {
           <h1 className="text-[30px] font-black text-center absolute top-24 translate-y-24">
             {nickname} 님이 선호하는 카페를 골라주세요.
           </h1>
-          <div className="grid grid-cols-5 gap-[30px]">
+          <div className="grid grid-cols-5 gap-[30px] my-5">
             {Object.values(CafeTagTypes).map((type) => (
               <label key={type}> 
                 <div className={`border-4 w-[220px] h-[150px] flex justify-center items-center rounded-xl shadow-md hover:cursor-pointer ${clickedTags[type] ? "border-blue-900" : "border-gray-300"}`}>

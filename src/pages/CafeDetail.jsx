@@ -10,20 +10,42 @@ import ContentLayout from "../components/layout/ContentLayout";
 import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 import { useGetImage } from "../tanstack/queries/useGetImage";
 import supabase from "../services/supabase";
+import { fetchNaverImage } from "../services/naverimage";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [userData, setUserData] = useState(null); // supabase에서 유저 데이터 관리
+  const [isUserLoaded, setIsUserLoaded] = useState(false); // 사용자 로딩 상태 관리
+  const { data: naverImage, isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
 
   useEffect(() => {
-    const loadPreview = async () => {
-      const imgUrl = await fetchNaverImage(place_name);
-      setImage(imgUrl || null);
+    // Supabase에서 현재 로그인된 사용자 정보를 가져옴
+    const fetchUserData = async () => {
+      const { data, error } = await supabase.auth.getUser(); // getUser() 사용
+      if (error) {
+        console.error("로그인된 사용자 정보 조회 실패:", error);
+        setIsUserLoaded(true); // 오류가 발생하더라도 로딩 완료 처리
+        return;
+      }
+      if (data.user) {
+        setUserData(data.user);
+      }
+      setIsUserLoaded(true); // 사용자 데이터 로드 완료
     };
+    fetchUserData();
+  }, []);
 
-    loadPreview();
-  }, [place_name]);
+  // useEffect(() => {
+  //   const loadPreview = async () => {
+  //     const imgUrl = await fetchNaverImage(place_name);
+  //     setImage(imgUrl || null);
+  //   };
+
+  //   loadPreview();
+  // }, [place_name]);
 
   useEffect(() => {
     const checkBookmark = async () => {
@@ -108,7 +130,14 @@ const CafeDetail = () => {
               {naverImage &&
                 naverImage.map((image, idx) => {
                   if (idx >= 5) return;
-                  return <img key={image.link} src={image.thumbnail}  alt="" onError="this.onerror=null; this.src=''; this.style.display='none'"/>
+                  return (
+                    <img
+                      key={image.link}
+                      src={image.thumbnail}
+                      alt=""
+                      onError="this.onerror=null; this.src=''; this.style.display='none'"
+                    />
+                  );
                 })}
             </div>
             <div className="flex flex-col justify-between items-end">

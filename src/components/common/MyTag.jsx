@@ -18,13 +18,13 @@ const MyTag = () => {
     <>
       <div
         onClick={() => setShowOptions(true)}
-        className="flex items-center h-[40px] px-[16px] border-[3px] bg-[#8080ff22] border-[#8080ff] font-medium rounded-full"
+        className="flex items-center h-[40px] px-[16px] border-[3px] bg-[#ffffff36] border-[#ffffffac] font-medium rounded-full"
       >
         # {cafeData?.length > 0 ? cafeData.map((cafe) => cafe.tag_type) : "태그를 선택해주세요"}
       </div>
 
       {showOptions && (
-        <div className="absolute flex flex-col gap-[12px] items-start bg-[#00000075] rounded-[20px] p-[16px_10px]">
+        <div className="absolute transform translate-x-full flex flex-col gap-[12px] items-start bg-[#00000075] rounded-[20px] p-[16px_10px]">
           {Object.values(CafeTagTypes).map((type) => (
             <Fragment key={type}>
               <Tag

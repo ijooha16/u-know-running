@@ -6,19 +6,27 @@ import supabase from "../services/supabase";
 import ContentLayout from "../components/layout/ContentLayout";
 import { useUserInfo } from "../tanstack/queries/useUserInfo";
 import useUserStore from "../stores/useUserStore";
+import { useUpdateUserInfo } from "../tanstack/mutations/useUpdateUserInfo";
+import { useUserBookmarks } from "../tanstack/queries/\buseUserBookmarks";
+import CafeCard from "../components/CafeCard";
+import { useGetUserTopTags } from "../tanstack/queries/useGetUserTopTags";
+import MainTag from "../components/common/MainTag";
 
 const Mypage = () => {
-  const [profileImg, setProfileImg] = useState(null); // 프로필 이미지 상태 관리
-  const [isEdit, setIsEdit] = useState(false); // 프로필 수정 여부 관리 (수정/수정 완료 버튼 토글)
-  const [conversionTab, setConversionTab] = useState("bookmark"); // 북마크 / 태그 탭 전환
-  const { userData, setUserData } = useUserStore();
-  const { data: userInfo, isLoading: userLoading, isError: userError } = useUserInfo(); // 사용자 정보 가져오기
-  const [editableUserInfo, setEditableUserInfo] = useState(userInfo); // 수정 가능한 사용자 정보 상태
+  const [profileImg, setProfileImg] = useState(null); // 프로필 이미지 상태
+  const [isEdit, setIsEdit] = useState(false); // 프로필 수정 모드 여부
+  const [conversionTab, setConversionTab] = useState("bookmark"); // 탭 전환: "bookmark" or "tag"
 
+  const { userData } = useUserStore();
+  const { data: userInfo, isLoading: userLoading, isError: userError } = useUserInfo();
+  const [editableUserInfo, setEditableUserInfo] = useState(userInfo);
+  const { mutate: updateUserInfo } = useUpdateUserInfo();
+
+  // userInfo가 업데이트되면 프로필 이미지와 편집 가능한 정보 업데이트
   useEffect(() => {
     if (userInfo) {
-      setProfileImg(userInfo.profile_image); // 프로필 이미지 설정
-      setEditableUserInfo(userInfo); // userInfo 변경 시 수정 가능한 정보 업데이트
+      setProfileImg(userInfo.profile_image);
+      setEditableUserInfo(userInfo);
     }
   }, [userInfo]);
 
@@ -28,49 +36,41 @@ const Mypage = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImg(reader.result); // 이미지 읽어오기 완료 후 state 업데이트
+        setProfileImg(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // 수정 버튼 클릭 시 동작하는 함수 (수정 완료 및 수정 상태 토글)
+  // 수정 버튼 핸들러
   const toggleEdit = async (e) => {
     e.preventDefault();
     if (isEdit) {
+      // 수정 완료 시 사용자 정보 업데이트
       const { data: authUser, error: authError } = await supabase.auth.getUser();
       if (authError || !authUser?.user) {
         console.error("로그인된 사용자를 가져오는 데 실패했습니다.", authError);
         return;
       }
-
       const userId = authUser.user.id;
-
-      // 'users' 테이블에서 유저 정보 업데이트
-      const { error: updateError } = await supabase
-        .from("users")
-        .update({
-          nickname: editableUserInfo.nickname,
-          mbti: editableUserInfo.mbti,
-          gender: editableUserInfo.gender,
-          email: editableUserInfo.email
-        })
-        .eq("users_uid", userId);
-
-      if (updateError) {
-        console.error("사용자 정보를 업데이트하는 데 실패했습니다.", updateError.message);
-      } else {
-        console.log("사용자 정보가 성공적으로 업데이트되었습니다.");
-      }
+      updateUserInfo({ userId, updatedData: editableUserInfo });
     }
-
-    setIsEdit((prev) => !prev); // 수정 모드 토글
+    setIsEdit((prev) => !prev);
   };
 
-  // 탭 변경 핸들러
+  // 탭 전환 핸들러
   const handleTab = (tab) => {
     setConversionTab(tab);
   };
+
+  // 로그인한 유저의 북마크 데이터 가져오기
+  const { data: bookmarks, isLoading: bookmarksLoading, isError: bookmarksError } = useUserBookmarks(userData.id);
+
+  // 로그인한 유저의 태그 데이터 가져오기
+  const { data: tagList, isLoading: tagListLoading, isError: tagListError } = useGetUserTopTags(userData.id);
+
+  if (userLoading) return <div>사용자 정보 로딩중...</div>;
+  if (userError) return <div>사용자 정보 불러오기 실패</div>;
 
   return (
     <ContentLayout>
@@ -81,35 +81,38 @@ const Mypage = () => {
             <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
             <ContentBox>
               <div className="w-32 h-32 bg-gray-300 rounded-full overflow-hidden mb-4">
-                {/* 프로필 이미지 표시 */}
                 <img
-                  src={profileImg || "/path/to/default/image.jpg"} // 프로필 이미지 없으면 기본 이미지
+                  src={profileImg || "/path/to/default/image.jpg"}
                   className="w-full h-full object-cover"
+                  alt="프로필"
                 />
               </div>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleProfileImgChange}
-                className={`${isEdit ? "block" : "hidden"}`} // 수정 모드에서만 이미지 변경 가능
-              />
-              {/* 이름 입력 */}
+              {isEdit && <Input type="file" accept="image/*" onChange={handleProfileImgChange} />}
               <Input
                 type="text"
                 placeholder="이름"
-                value={editableUserInfo?.nickname || ""} // 수정 가능한 상태에서 닉네임 값 반영
-                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, nickname: e.target.value })}
+                value={editableUserInfo?.nickname || ""}
+                onChange={(e) =>
+                  setEditableUserInfo({
+                    ...editableUserInfo,
+                    nickname: e.target.value
+                  })
+                }
                 className="border"
-                disabled={!isEdit} // 수정 모드일 때만 입력 가능
+                disabled={!isEdit}
               />
             </ContentBox>
             <ContentBox>
-              {/* MBTI, Gender, Email 입력 */}
               <Input
                 type="text"
                 placeholder="MBTI"
                 value={editableUserInfo?.mbti || ""}
-                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, mbti: e.target.value })}
+                onChange={(e) =>
+                  setEditableUserInfo({
+                    ...editableUserInfo,
+                    mbti: e.target.value
+                  })
+                }
                 className="border mb-4"
                 disabled={!isEdit}
               />
@@ -117,7 +120,12 @@ const Mypage = () => {
                 type="text"
                 placeholder="Gender"
                 value={editableUserInfo?.gender || ""}
-                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, gender: e.target.value })}
+                onChange={(e) =>
+                  setEditableUserInfo({
+                    ...editableUserInfo,
+                    gender: e.target.value
+                  })
+                }
                 className="border mb-4"
                 disabled={!isEdit}
               />
@@ -125,17 +133,21 @@ const Mypage = () => {
                 type="email"
                 placeholder="test@google.com"
                 value={editableUserInfo?.email || ""}
-                onChange={(e) => setEditableUserInfo({ ...editableUserInfo, email: e.target.value })}
+                onChange={(e) =>
+                  setEditableUserInfo({
+                    ...editableUserInfo,
+                    email: e.target.value
+                  })
+                }
                 className="border mb-4"
                 disabled={!isEdit}
               />
             </ContentBox>
-            {/* 수정 버튼 */}
-            <Button type="Button" onClick={toggleEdit} text={isEdit ? "수정 완료" : "수정하기"} />
+            <Button type="button" onClick={toggleEdit} text={isEdit ? "수정 완료" : "수정하기"} />
           </div>
         </form>
 
-        {/* 오른쪽 영역: 북마크된 콘텐츠 및 조건부 랜더링 */}
+        {/* 오른쪽 영역: 북마크 및 태그 탭 */}
         <div className="flex flex-col gap-[30px] justify-start items-center">
           <div className="flex items-center gap-6">
             <button
@@ -148,7 +160,7 @@ const Mypage = () => {
             <button
               type="button"
               onClick={() => handleTab("tag")}
-              className={`${conversionTab === "tag" ? " text-black font-bold text-[24px]" : "text-darkgray"}`}
+              className={`${conversionTab === "tag" ? "text-black font-bold text-[24px]" : "text-darkgray"}`}
             >
               태그
             </button>
@@ -156,11 +168,27 @@ const Mypage = () => {
           <div className="w-[630px] bg-white p-6 rounded-lg shadow-lg">
             {conversionTab === "bookmark" ? (
               <div className="grid grid-cols-2 gap-4">
-                <p>북마크된 카페가 없습니다.</p>
+                {bookmarksLoading ? (
+                  <p>북마크 로딩중...</p>
+                ) : bookmarksError ? (
+                  <p>북마크 불러오기 실패</p>
+                ) : bookmarks && bookmarks.length > 0 ? (
+                  bookmarks.map((bookmark) => <CafeCard key={bookmark.cafe_id} cafe={bookmark} />)
+                ) : (
+                  <p>북마크된 카페가 없습니다.</p>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                <p>태그가 없습니다.</p>
+                {tagListLoading ? (
+                  <p>태그 리스트 로딩중...</p>
+                ) : tagListError ? (
+                  <p>태그 리스트 불러오기 실패</p>
+                ) : tagList && tagList.length > 0 ? (
+                  tagList.map((tag, idx) => <MainTag key={idx} tagText={tag.tag} variant="tag" />)
+                ) : (
+                  <MainTag tagText="아무 태그도 등록되지 않았어요." />
+                )}
               </div>
             )}
           </div>

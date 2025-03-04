@@ -1,25 +1,53 @@
 import Icon from "./common/Icon";
-import MainTag from "./common/MainTag";
 import { useGetImage } from "../tanstack/queries/useGetImage";
-import useCafeStore from "../stores/useCafeStore";
-import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
+import { useToggleBookmark } from "../tanstack/mutations/useBookmarksMutation";
+import useUserStore from "../stores/useUserStore";
+import { toast } from "react-toastify";
 
-const CafeCard = () => {
-  const { selectedCafe, setSelectedCafe } = useCafeStore();
-  const { id: cafe_id, place_name, road_address_name, address_name } = selectedCafe;
+const CafeCard = ({ cafe }) => {
+  // 받아온걸로 데이터 추출
+  const { cafe_id, place_name, road_address_name, address_name, phone, place_url } = cafe;
+  const { userData } = useUserStore();
 
-  // 북마크 부분 추가 후 머지하면 됨.
+  const isBookmarked = true;
 
-  const { data: naverImage, isLoading: imageLoading, error: imageError } = useGetImage();
-  const image = naverImage[0].thumbnail;
+  const { mutate: toggleBookmark, isLoading: isBookmarkedLoading, error: bookmarkError } = useToggleBookmark();
 
-  const { data: tagList, isLoading: tagLoading, error: tagError } = useGetCafeTopTags(cafe_id);
+  // 네이버 이미지
+  const { data: naverImage, isLoading: imageLoading, error: imageError } = useGetImage(place_name);
+  const image = naverImage && naverImage[0].thumbnail;
+
+  const handleBookmarkToggle = () => {
+    const bookmarkData = {
+      users_uid: userData.id,
+      cafe_id,
+      place_name,
+      road_address_name,
+      address_name,
+      phone,
+      place_url,
+      isBookmarked
+    };
+    toggleBookmark(bookmarkData, {
+      onSuccess: () => {
+        if (isBookmarked) {
+          toast.success("북마크가 해제되었습니다.");
+        } else {
+          toast.success("북마크가 등록되었습니다.");
+        }
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error("북마크 변경에 오류가 있습니다. 다시 시도해 주세요.");
+      }
+    });
+  };
 
   if (imageLoading) return <div>이미지 불러오는 중..</div>;
   if (imageError) return <div>이미지 불러오기 실패</div>;
 
-  if (tagLoading) return <div>태그 목록 불러오는 중..</div>;
-  if (tagError) return <div>태그 불러오기 실패</div>;
+  if (isBookmarkedLoading) return <div>북마크 불러오는 중..</div>;
+  if (bookmarkError) return <div>북마크 불러오기 실패</div>;
 
   return (
     <div
@@ -29,16 +57,10 @@ const CafeCard = () => {
       <div className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] w-full flex flex-col justify-end items-start p-[20px_16px] rounded-[20px]">
         <img src={image} className="w-full h-full object-cover" />
         <div className="flex justify-between w-full items-center pr-[12px]">
-          {tagList.length > 0 ? (
-            tagList.map((tag, index) => <MainTag key={index} tagText={tag.tag} />) // 상위 4개 태그 모두 MainTag로 표시한 것임.
-          ) : (
-            <MainTag tagText={"아무 태그도 등록되지 않았어요."} />
-          )}
-          북마크 관련 함수 머지 후 수정 예정
           <Icon
             icon="bookMark"
-            onClick={() => handleBookmark(cafe.id)}
-            className={`${bookmarkedCafes[cafe.id] ? "text-yellow-500" : "text-white"} cursor-pointer`}
+            onClick={handleBookmarkToggle}
+            className={`${isBookmarked ? "text-yellow-500" : "text-white"} cursor-pointer`}
           />
         </div>
         <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>

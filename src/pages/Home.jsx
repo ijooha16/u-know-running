@@ -29,7 +29,7 @@ const Home = () => {
       </ContentLayout>  */}
 
       <div className="w-screen h-screen">
-        <Link to="/cafe-list">
+        <Link to="/cafe-results-list">
           <Button icon="hamburger_white" text="목록으로 보기" className="fixed bottom-[40px] right-[40px]" />
         </Link>
         <KakaoCafeMap width="100vw" height="100vh" />

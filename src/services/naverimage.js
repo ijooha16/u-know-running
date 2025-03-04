@@ -1,4 +1,3 @@
-// ogimage 대체 - 사유: ogimage로 불러올 수 있는 이미지가 지도로 한정됨.
 export const fetchNaverImage = async (place_name) => {
   try {
     const response = await fetch(`/api/naver-image?query=${place_name}`);
@@ -13,6 +12,8 @@ export const fetchNaverImage = async (place_name) => {
   }
 };
 
-
 // 1. naver api 요청할때 query stirng 에서 0 번째를 요청 할 수 있느지 ? query = {name } 여기서 더 추가가 되는지를 확인
+// ** 일단 useGetImage로 사용 전환해 보고, 추가 검토하기로 함.
+
 // 2. useNaverImage를 개선하는데 이걸 useQuery를 이용해서 queryKey , retry, staleTIme을 이용해서 중복되는 요청 막기를 해보는것으로
+// ** answer : staleTime, retry 설정 추가 및 refetchOnWindowFocus 및 refetchOnMount 조치 취함

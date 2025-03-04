@@ -5,33 +5,24 @@ import MyTag from "../components/common/MyTag";
 import Tag from "../components/common/Tag";
 import Modal from "../components/Modal";
 import useCafeStore from "../stores/useCafeStore";
-import { useState, useEffect } from "react";
-import { fetchNaverImage } from "../services/naverimage";
+import { useState } from "react";
 import ContentLayout from "../components/layout/ContentLayout";
 import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
+import { useGetImage } from "../tanstack/queries/useGetImage";
 
 const CafeDetail = () => {
   const { selectedCafe, setSelectedCafe } = useCafeStore();
   const { id: cafe_id, place_name, road_address_name, address_name, phone, place_url } = selectedCafe;
-  const [image, setImage] = useState("");
   const { data: tagList, isLoading, error } = useGetCafeTopTags(cafe_id);
-  const [isLoaded, setIsLoaded] = useState(true);
-
-  console.log(image);
-
-  useEffect(() => {
-    const loadPreview = async () => {
-      const imgUrl = await fetchNaverImage(place_name);
-      setImage(imgUrl || null); // 기본 이미지 설정 가능
-    };
-
-    loadPreview();
-  }, [place_name]);
+  const { data: naverImage, isLoading: isImageLoading, error: imageError } = useGetImage(place_name);
 
   if (!selectedCafe) return null;
 
-  if (isLoading) return <div>태그 로딩중..</div>;
+  if (isLoading) return <div>태그 로딩 중..</div>;
   if (error) return <div>태그 불러오기 실패</div>;
+
+  if (isImageLoading) return <div>이미지 불러오는 중..</div>;
+  if (imageError) return <div>이미지 불러오기 실패</div>;
 
   return (
     <div
@@ -42,10 +33,17 @@ const CafeDetail = () => {
         <Modal>
           <div className="flex gap-[30px]">
             <div className="flex flex-wrap max-w-[500px] min-h-[320px]">
-              {image &&
-                image.map((image, idx) => {
+              {naverImage &&
+                naverImage.map((image, idx) => {
                   if (idx >= 5) return;
-                  return <img key={image.link} src={image.thumbnail} alt='no image' onError="this.style.display='none'" />;
+                  return (
+                    <img
+                      key={image.link}
+                      src={image.thumbnail}
+                      alt=""
+                      onError="this.onerror=null; this.src=''; this.style.display='none'"
+                    />
+                  );
                 })}
             </div>
             <div className="flex flex-col justify-between items-end">

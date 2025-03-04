@@ -13,7 +13,7 @@ const useGetCafes = (lat, lng) => {
       return cafes;
     },
     enabled: !!lat && !!lng, // 위치 정보가 있을 때만 실행
-    staleTime: 1000 * 60 * 5, // 5분 동안 캐싱 유지
+    staleTime: 1000 * 60 * 5 // 5분 동안 캐싱 유지
   });
 };
 

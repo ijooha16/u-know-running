@@ -11,13 +11,13 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  const { setUserData } = useUserStore;
+  const { setUserData } = useUserStore();
 
   const onSignupHandler = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error('비밀번호가 일치하지 않습니다')
+      return toast.error('비밀번호가 일치하지 않습니다')
     }
 
     //수파베이스에 있는 회원가입 함수
@@ -30,13 +30,18 @@ const SignUp = () => {
         }
       }
     });
-    if (error) throw error;
+    if (error) {
+      return toast.error("회원가입 오류"),
+      console.log(error)
+    }
 
 //회원가입시 자동으로 로그인 되면 그 정보를 스토어에 넘기는 로직
     setUserData(data.user)
-//리로드 되어야 헤더의 로그인/회원가입이 바뀌어서 리로드 하면서 페이지 이동
-    window.location.replace("/splash")
-  };
+setTimeout(() => {
+  window.location.replace("/splash");
+}, 800);
+toast.success("회원가입 성공! 로그인 되었습니다.");
+};
 
   return (
     <form onSubmit={onSignupHandler}>

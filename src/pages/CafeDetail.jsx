@@ -77,7 +77,8 @@ const CafeDetail = () => {
                 <ModalImage />
                 <div className="w-full flex justify-between items-center pr-[16px]">
                   <MainTag tagText={tagList[0]?.tag || "아무 태그도 등록되지 않았어요"} />
-                  <Icon icon="bookMark" onClick={handleClick} /> {/* 아이콘을 변경하지 않고 그대로 사용 */}
+                  <Icon icon={isBookmarked ? "bookMark" : "bookMark_empty"} onClick={handleClick} />{" "}
+                  {/* 아이콘을 변경하지 않고 그대로 사용 */}
                 </div>
                 <div className="font-semibold text-[26px] pl-[12px]">{place_name || "이름없음"}</div>
                 <a

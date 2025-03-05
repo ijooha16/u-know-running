@@ -10,7 +10,7 @@ const CafeCard = ({ cafe }) => {
   // 받아온걸로 데이터 추출
   const { cafe_id, place_name, road_address_name, address_name, phone, place_url } = cafe;
   const { userData } = useUserStore();
-  const { data: tagList } = useGetCafeTopTags(cafe_id);
+  const { data: tagList = [] } = useGetCafeTopTags(cafe_id);
 
   const isBookmarked = true;
 
@@ -34,7 +34,7 @@ const CafeCard = ({ cafe }) => {
     toggleBookmark(bookmarkData, {
       onSuccess: () => {
         if (isBookmarked) {
-          toast.success("북마크가 해제되었습니다.");
+          toast.error("북마크가 해제되었습니다.");
         } else {
           toast.success("북마크가 등록되었습니다.");
         }
@@ -60,7 +60,7 @@ const CafeCard = ({ cafe }) => {
       >
         <img src={image} className="w-[268px] h-[268px] object-cover" />
         <div className="flex justify-between w-full items-center pr-[12px] mt-[16px]">
-          <MainTag tagText={tagList[0]?.tag || ""} />
+          <MainTag tagText={tagList[0]?.tag || "태그없음"} />
           <Icon
             icon={isBookmarked ? "bookMark" : "bookMark_empty"}
             onClick={handleBookmarkToggle}

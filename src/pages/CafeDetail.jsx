@@ -44,7 +44,7 @@ const CafeDetail = () => {
     toggleBookmark(bookmarkData, {
       onSuccess: () => {
         if (isBookmarked) {
-          toast.success(SuccessMessage.removeBookmark);
+          toast.error(SuccessMessage.removeBookmark);
         } else {
           toast.success(SuccessMessage.storeBookmark);
         }

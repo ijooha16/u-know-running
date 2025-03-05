@@ -40,7 +40,7 @@ export const useDeleteCommentMutation = () => {
     mutationFn: deleteComment,
     onSuccess: (data) => {
       console.log(data, "삭제 성공");
-      toast.success(SuccessMessage.deleteComment);
+      toast.error(SuccessMessage.deleteComment);
       queryClient.invalidateQueries(QUERY_KEYS.COMMENTS);
     },
     onError: (error) => {

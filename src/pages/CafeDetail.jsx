@@ -70,7 +70,7 @@ const CafeDetail = () => {
     <div onClick={() => setSelectedCafe(null)}>
       <ContentLayout>
         <Modal>
-          <div className="h-[500px] flex gap-[30px]">
+          <div className="h-[540px] flex gap-[30px]">
             <div className="h-full flex flex-col justify-between">
               <div className="w-auto min-w-[400px] flex flex-col items-start gap-[20px]">
                 <ModalImage />
@@ -91,13 +91,15 @@ const CafeDetail = () => {
                   <br />
                   {phone || "번호없음"}
                 </div>
-                {tagList?.map((tag, idx) => {
-                  if (idx === 0) return null;
-                  return <Tag key={tag.tag} tagText={`${tag.tag} - ${tag.count}`} />;
-                })}
+                <div className="w-full flex gap-[12px] overflow-auto">
+                  {tagList?.map((tag, idx) => {
+                    if (idx === 0) return null;
+                    return <Tag key={tag.tag} tagText={tag.tag} />;
+                  })}
+                </div>
               </div>
-              <div className="flex items-center text-white rounded-[20px] bg-[#1919707f] w-full justify-center p-[10px]">
-                나는 이곳이 &nbsp; <MyTag /> &nbsp; 카페라고 생각해요
+              <div className="flex items-center text-white rounded-[20px] bg-secondary w-full justify-center p-[10px_16px]">
+                {`${place_name}`}&nbsp; 카페는 &nbsp; <MyTag /> &nbsp; 곳이라 좋아요!
               </div>
             </div>
             <CommentBox />

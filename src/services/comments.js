@@ -7,21 +7,24 @@ export const getComments = async () => {
 };
 
 export const createComment = async ({ cafe_id, cafe_name, comments, user_uid, nickname }) => {
-  const { data, error } = await supabase.from("comments").insert([
-    {
-      cafe_id,
-      cafe_name,
-      comments,
-      user_uid,
-      nickname
-    }
-  ]);
+  const { data, error } = await supabase
+    .from("comments")
+    .insert([
+      {
+        cafe_id,
+        cafe_name,
+        comments,
+        user_uid,
+        nickname
+      }
+    ])
+    .select();
 
-  console.log(data);
   if (error) throw error;
+  return data;
 };
 
-export const updateComment = async (id, comments) => {
+export const updateComment = async ({id, comments}) => {
   const { data, error } = await supabase
     .from("comments")
     .update({
@@ -30,9 +33,11 @@ export const updateComment = async (id, comments) => {
     .eq("id", id)
     .select();
   if (error) throw error;
+  return data;
 };
 
-export const deleteComment = async (id) => {
+export const deleteComment = async ({id}) => {
   const { data, error } = await supabase.from("comments").delete().eq("id", id);
   if (error) throw error;
+  return data;
 };

@@ -10,7 +10,9 @@ import { useEffect, useState } from "react";
 import supabase from "../services/supabase";
 
 const CafeResultsList = () => {
-  const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
+  // const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
+  const { isLoading: isLocationLoading, error: locationError } = useGetLocation();
+  const position = { lat: 37.5563, lng: 126.9236 };
   const { cafes } = useCafeStore();
   const { isLoading: isCafesLoading, error: cafesError } = useGetCafes(position?.lat, position?.lng);
   const [selected, setSelected] = useState(null); // 태그 선택
@@ -56,35 +58,33 @@ const CafeResultsList = () => {
   if (locationError || cafesError || loadError) return <p>카페 로딩 오류 발생</p>;
 
   return (
-    <ContentLayout>
-      {position && (
-        <div>
-          {/* 태그 */}
-          <div className="grid grid-cols-5 items-center p-5 gap-5 w-[1000px] whitespace-nowrap [&>*]:hover:cursor-pointer [&>/]:active:bg-orange-600 [&>*]:bg-[#191971] [&>*]:text-white mb-10 [&>*]:text-[11px] justify-i">
-            {Object.entries(CafeTagTypes).map(([key, value], index) => (
-              <Tag
-                key={key}
-                tagText={value}
-                isSelected={selected === index}
-                onClick={() => handleSelectTag(index)}
-                className="checked:bg-red-400"
-              />
+    <>
+      <div className="flex flex-col gap-[90px] min-h-[calc(100vh-420px)] my-[80px]">
+        {/* 태그 */}
+        <div className="w-[1000px] flex flex-wrap items-center justify-center p-5 gap-8">
+          {Object.entries(CafeTagTypes).map(([key, value], index) => (
+            <Tag
+              key={key}
+              tagText={value}
+              isSelected={selected === index}
+              onClick={() => handleSelectTag(index)}
+              className="cursor-pointer"
+            />
+          ))}
+        </div>
+
+        {/* 카페 카드들 */}
+        {filteredCafes.length === 0 ? (
+          <p className="flex justify-center items-center w-[960px]">해당 태그를 가진 카페가 없습니다.</p>
+        ) : (
+          <div className="grid grid-cols-3 gap-[30px]">
+            {filteredCafes.map((cafe) => (
+              <CafeCard key={cafe.id} cafe={cafe} cafeKey={cafe.id} />
             ))}
           </div>
-
-          {/* 카페 카드들 */}
-          {filteredCafes.length === 0 ? (
-            <p className="flex justify-center items-center">해당 태그를 가진 카페가 없습니다.</p>
-          ) : (
-            <div className="grid grid-cols-3 gap-[30px] mx-auto w-fit">
-              {filteredCafes.map((cafe) => (
-                <CafeCard key={cafe.id} cafe={cafe} cafeKey={cafe.id} />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </ContentLayout>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -42,6 +42,7 @@ const CafeCard = ({ cafe }) => {
       }
     });
   };
+  
 
   if (imageLoading) return <div>이미지 불러오는 중..</div>;
   if (imageError) return <div>이미지 불러오기 실패</div>;
@@ -63,8 +64,8 @@ const CafeCard = ({ cafe }) => {
             className={`${isBookmarked ? "text-yellow-500" : "text-white"} cursor-pointer`}
           />
         </div>
-        <div className="font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
-        <div className="text-lightgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
+        <div className="z-0 font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
+        <div className="z-0 text-lightgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
       </div>
     </div>
   );

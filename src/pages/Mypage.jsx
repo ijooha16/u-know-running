@@ -7,7 +7,7 @@ import ContentLayout from "../components/layout/ContentLayout";
 import { useUserInfo } from "../tanstack/queries/useUserInfo";
 import useUserStore from "../stores/useUserStore";
 import { useUpdateUserInfo } from "../tanstack/mutations/useUpdateUserInfo";
-import { useUserBookmarks } from "../tanstack/queries/\buseUserBookmarks";
+import { useUserBookmarks } from "../tanstack/queries/useUserBookmarks";
 import CafeCard from "../components/CafeCard";
 import { useGetUserTopTags } from "../tanstack/queries/useGetUserTopTags";
 import MainTag from "../components/common/MainTag";

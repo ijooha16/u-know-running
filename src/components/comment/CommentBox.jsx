@@ -4,7 +4,7 @@ import Comment from "./Comment";
 import CommentInput from "./CommentInput";
 import { useGetCommentsQuery } from "../../tanstack/queries/useGetCommentsQuery";
 import useCafeStore from "../../stores/useCafeStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const CommentBox = () => {
   const { commentArr, setComments } = useCommentStore();
@@ -18,8 +18,6 @@ const CommentBox = () => {
       console.log("filtered", filteredComments);
     }
   }, [data, selectedCafe.id, setComments]);
-
-  console.log(commentArr);
 
   return (
     <ContentBox className="flex flex-col justify-between h-full w-[400px] bg-lightgray">

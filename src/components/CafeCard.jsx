@@ -42,7 +42,6 @@ const CafeCard = ({ cafe }) => {
       }
     });
   };
-  
 
   if (imageLoading) return <div>이미지 불러오는 중..</div>;
   if (imageError) return <div>이미지 불러오기 실패</div>;
@@ -51,17 +50,17 @@ const CafeCard = ({ cafe }) => {
   if (bookmarkError) return <div>북마크 불러오기 실패</div>;
 
   return (
-    <div
-      key={cafe_id}
-      className={`shadow bg-[url(https://www.thinkfood.co.kr/news/photo/202007/88177_114044_267.jpg)] h-auto w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px]`}
-    >
-      <div className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] w-full flex flex-col justify-end items-start p-[20px_16px] rounded-[20px]">
-        <img src={image} className="w-full h-full object-cover" />
+    <div className={`shadow h-[400px]] w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px]`}>
+      <div
+        key={cafe_id}
+        className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] h-full w-full flex flex-col justify-start items-start p-[20px_16px] rounded-[20px]"
+      >
+        <img src={image} className="w-[268px] h-[268px] object-cover" />
         <div className="flex justify-between w-full items-center pr-[12px]">
           <Icon
-            icon="bookMark"
+            icon={isBookmarked ? "bookMark" : "bookMark_empty"}
             onClick={handleBookmarkToggle}
-            className={`${isBookmarked ? "text-yellow-500" : "text-white"} cursor-pointer`}
+            className="cursor-pointer"
           />
         </div>
         <div className="z-0 font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>

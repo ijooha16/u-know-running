@@ -3,6 +3,7 @@ import { useDeleteCommentMutation, useUpdateCommentMutation } from "../../tansta
 import Icon from "../common/Icon";
 import useUserStore from "../../stores/useUserStore";
 import { toast } from "react-toastify";
+import { ErrorMessage } from "../../data/toastMessages";
 
 const Comment = ({ nickname, comment, id, user_uid }) => {
   const { mutate: deleteComment } = useDeleteCommentMutation();
@@ -28,7 +29,7 @@ const Comment = ({ nickname, comment, id, user_uid }) => {
           <div
             onClick={() => {
               if (!newComment) {
-                toast.error("댓글을 써주세요");
+                toast.error(ErrorMessage.requireComment);
                 return;
               }
               editComment({ id, comments: newComment });

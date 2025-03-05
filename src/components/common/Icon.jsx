@@ -7,7 +7,7 @@ import sendIcon from "../../assets/icons/icon_send.png";
 import deleteIcon from "../../assets/icons/icon_delete.png";
 import editIcon from "../../assets/icons/icon_edit.png";
 import checkIcon from "../../assets/icons/icon_check.png";
-import bookMarkEmptyIcon from "../../assets/icons/icon_bookMark_empty.png";
+import bookMarkEmptyIcon from "../../assets/icons/icon_bookmark_empty.png";
 
 //아이콘 import 해주기
 //iconSrc 객체 안에 키-값(아이콘변수명) 넣어주기

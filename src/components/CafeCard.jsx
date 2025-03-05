@@ -60,7 +60,7 @@ const CafeCard = ({ cafe }) => {
       >
         <img src={image} className="w-[268px] h-[268px] object-cover" />
         <div className="flex justify-between w-full items-center pr-[12px] mt-[16px]">
-          <MainTag tagText={tagList[0]?.tag || ""} />
+          <MainTag tagText={tagList?.map((tag, idx) => idx === 0 && tag.tag) || ""} />
           <Icon
             icon={isBookmarked ? "bookMark" : "bookMark_empty"}
             onClick={handleBookmarkToggle}

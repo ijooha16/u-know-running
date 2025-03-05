@@ -49,24 +49,24 @@ const CafeCard = ({ cafe }) => {
   if (isBookmarkedLoading) return <div>북마크 불러오는 중..</div>;
   if (bookmarkError) return <div>북마크 불러오기 실패</div>;
 
+
   return (
-    <div className={`shadow h-[400px]] w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px]`}>
-      <div
-        key={cafe_id}
-        className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] h-full w-full flex flex-col justify-start items-start p-[20px_16px] rounded-[20px]"
-      >
-        <img src={image} className="w-[268px] h-[268px] object-cover" />
-        <div className="flex justify-between w-full items-center pr-[12px]">
-          <Icon
-            icon={isBookmarked ? "bookMark" : "bookMark_empty"}
-            onClick={handleBookmarkToggle}
-            className="cursor-pointer"
-          />
+      <div className={`shadow h-[450px] w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px] overflow-hidden relative`}>
+        <img src={image} className="absolute h-[450px] max-w-fit "/>
+        <div key={cafe_id} className="z-0 bg-gradient-to-t from-[#000000d7]/60 to-[#0000003e]/0 min-h-[300px] h-full w-full flex flex-col justify-start items-start p-[20px_16px] rounded-[20px]">
+          <div className="absolute bottom-10">
+            <div className="flex justify-between w-full items-center pr-[12px]">
+              <Icon
+                icon={isBookmarked ? "bookMark" : "bookMark_empty"}
+                onClick={handleBookmarkToggle}
+                className="cursor-pointer"
+              />
+            </div>
+            <div className="z-0 font-semibold text-[26px] px-[12px] mt-[10px] outline-solid mb-2">{place_name}</div>
+            <div className="z-0 text-lightgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
+          </div>
         </div>
-        <div className="z-0 font-semibold text-[26px] pl-[12px] mt-[10px]">{place_name}</div>
-        <div className="z-0 text-lightgray text-[14px] pl-[12px]">{address_name || road_address_name}</div>
       </div>
-    </div>
   );
 };
 

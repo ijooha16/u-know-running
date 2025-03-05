@@ -1,5 +1,4 @@
 import supabase from "./supabase";
-//일단 통채로 들고 왔는데 로그 보면서 필터링 할겁니다!
 export const getComments = async () => {
   const { data, error } = await supabase.from("comments").select("*");
   if (error) throw error;

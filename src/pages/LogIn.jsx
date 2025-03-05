@@ -5,6 +5,7 @@ import Input from "../components/common/Input";
 import supabase from "../services/supabase";
 import { toast } from "react-toastify";
 import useUserStore from "../stores/useUserStore";
+import { ErrorMessage, SuccessMessage } from "../data/toastMessages";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const LogIn = () => {
     });
 
     if (error) {
-      return toast.error("로그인 오류: " + error);
+      return toast.error(ErrorMessage.failLogin, error);
     }
 
     setUserData(data.user);
@@ -28,7 +29,7 @@ const LogIn = () => {
     setTimeout(() => {
       window.location.replace("/");
     }, 800);
-    toast.success("로그인 성공");
+    toast.success(SuccessMessage.successLogin);
   };
 
   return (

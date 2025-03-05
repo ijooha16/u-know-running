@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../../services/supabase";
+import { QUERY_KEYS } from "../query.keys";
 
 export const useUserInfo = () => {
   return useQuery({
-    queryKey: ["userInfo"], // 쿼리 키는 배열 형태로 전달
+    queryKey: QUERY_KEYS.USER_INFO, // 쿼리 키는 배열 형태로 전달
     queryFn: async () => {
       const { data: authUser, error: authError } = await supabase.auth.getUser();
       if (authError || !authUser?.user) {
@@ -13,7 +14,7 @@ export const useUserInfo = () => {
       const userId = authUser.user.id;
       const { data: userData, error: userError } = await supabase
         .from("users")
-        .select("nickname, mbti, gender, email")
+        .select("nickname, mbti, gender, email, profile_image")
         .eq("users_uid", userId)
         .single();
 

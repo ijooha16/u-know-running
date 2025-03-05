@@ -12,6 +12,7 @@ import { useBookmarks } from "../tanstack/queries/useBookmarks";
 import { useToggleBookmark } from "../tanstack/mutations/useBookmarksMutation";
 import { toast } from "react-toastify";
 import CommentBox from "../components/comment/CommentBox";
+import { ErrorMessage, SuccessMessage } from "../data/toastMessages";
 
 const CafeDetail = () => {
   // 여기 useCafeStore랑 selectedCafe 위치 절대 바꾸시면 안됩니다!!!
@@ -43,14 +44,14 @@ const CafeDetail = () => {
     toggleBookmark(bookmarkData, {
       onSuccess: () => {
         if (isBookmarked) {
-          toast.success("북마크가 해제되었습니다.");
+          toast.success(SuccessMessage.removeBookmark);
         } else {
-          toast.success("북마크가 등록되었습니다.");
+          toast.success(SuccessMessage.storeBookmark);
         }
       },
       onError: (error) => {
         console.error(error);
-        toast.error("북마크 변경에 오류가 있습니다. 다시 시도해 주세요.");
+        toast.error(ErrorMessage.failBookmark);
       }
     });
   };
@@ -70,7 +71,7 @@ const CafeDetail = () => {
     <div onClick={() => setSelectedCafe(null)}>
       <ContentLayout>
         <Modal>
-          <div className="h-[500px] flex gap-[30px]">
+          <div className="h-[540px] flex gap-[30px]">
             <div className="h-full flex flex-col justify-between">
               <div className="w-auto min-w-[400px] flex flex-col items-start gap-[20px]">
                 <ModalImage />

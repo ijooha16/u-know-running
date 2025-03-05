@@ -20,7 +20,7 @@ const MyTag = () => {
     <>
       <div
         onClick={() => setShowOptions(true)}
-        className="flex items-center h-[40px] px-[16px] border-[3px] bg-[#ffffff36] border-[#ffffffac] font-medium rounded-full"
+        className="flex items-center h-[40px] px-[16px] border-[3px] bg-[#ffffff36] border-[#ffffffac] cursor-pointer font-medium rounded-full"
       >
         # {filteredCafeTag?.length > 0 ? filteredCafeTag[0].tag_type : "태그를 선택해주세요"}
       </div>
@@ -35,6 +35,7 @@ const MyTag = () => {
                   upsertTag({ user_uid: userData.id, tag_type: type, cafe_id: selectedCafe.id });
                   setShowOptions(false);
                 }}
+                className='cursor-pointer'
               />
             </Fragment>
           ))}

@@ -70,7 +70,7 @@ const CafeDetail = () => {
     <div onClick={() => setSelectedCafe(null)}>
       <ContentLayout>
         <Modal>
-          <div className="h-[500px] flex gap-[30px]">
+          <div className="h-[540px] flex gap-[30px]">
             <div className="h-full flex flex-col justify-between">
               <div className="w-auto min-w-[400px] flex flex-col items-start gap-[20px]">
                 <ModalImage />

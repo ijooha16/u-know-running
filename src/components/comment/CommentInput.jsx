@@ -23,13 +23,13 @@ const CommentInput = () => {
       nickname: userData.user_metadata.nickname
     });
 
-    // createStoreComment({
-    //   cafe_id: selectedCafe.id,
-    //   cafe_name: selectedCafe.place_name,
-    //   comments: inputRef.current.value,
-    //   user_uid: userData.id,
-    //   nickname: userData.user_metadata.nickname
-    // });
+    createStoreComment({
+      cafe_id: selectedCafe.id,
+      cafe_name: selectedCafe.place_name,
+      comments: inputRef.current.value,
+      user_uid: userData.id,
+      nickname: userData.user_metadata.nickname
+    });
 
     inputRef.current.value = "";
   };

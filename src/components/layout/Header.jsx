@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import supabase from "../../services/supabase";
 import useUserStore from "../../stores/useUserStore";
 import { ErrorMessage } from "../../data/toastMessages";
+import Logo from '../../assets/images/해시카페.png'
 
 const Header = () => {
   const { userData } = useUserStore();
@@ -21,7 +22,7 @@ const Header = () => {
     <div className="h-[160px] bg-white w-full flex justify-between items-center px-[40px]">
       <div className="w-[220px]"></div>
       <Link to="/">
-        <img src="src/assets/images/해시카페.png" className="w-[100px] cursor-pointer" />
+        <img src={Logo} className="w-[100px] cursor-pointer" />
       </Link>
       <div className="w-[220px] flex gap-[40px]">
         <Link to={userData ? "/my-page" : "/sign-up"} className="text-darkgray cursor-pointer">

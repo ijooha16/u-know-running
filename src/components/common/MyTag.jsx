@@ -14,7 +14,6 @@ const MyTag = () => {
   const { mutate: upsertTag } = useUpsertTagMutation();
   const { data: cafeData } = useGetCafeTagQuery();
   const filteredCafeTag = cafeData?.filter(data => data.user_uid === userData.user_metadata.sub)
-  console.log(filteredCafeTag)
 
   return (
     <>

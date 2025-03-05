@@ -1,4 +1,5 @@
 import supabase from "./supabase";
+
 export const getComments = async () => {
   const { data, error } = await supabase.from("comments").select("*");
   if (error) throw error;
@@ -23,7 +24,7 @@ export const createComment = async ({ cafe_id, cafe_name, comments, user_uid, ni
   return data;
 };
 
-export const updateComment = async ({id, comments}) => {
+export const updateComment = async ({ id, comments }) => {
   const { data, error } = await supabase
     .from("comments")
     .update({

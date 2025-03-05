@@ -5,11 +5,8 @@ import CafeDetail from "../pages/CafeDetail";
 import useCafeStore from "../stores/useCafeStore";
 
 const KakaoCafeMap = ({ width, height }) => {
-  // const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
-  const { isLoading: isLocationLoading, error: locationError } = useGetLocation();
+  const { data: position, isLoading: isLocationLoading, error: locationError } = useGetLocation();
   const { selectedCafe, setSelectedCafe, cafes } = useCafeStore();
-
-  const position = { lat: 37.5563, lng: 126.9236 }
 
   const { isLoading: isCafesLoading, error: cafesError } = useGetCafes(position?.lat, position?.lng);
 

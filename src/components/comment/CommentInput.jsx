@@ -3,17 +3,27 @@ import useCafeStore from "../../stores/useCafeStore";
 import useUserStore from "../../stores/useUserStore";
 import { useCreateCommentMutation } from "../../tanstack/mutations/useCommentsMutation";
 import Icon from "../common/Icon";
+import useCommentStore from "../../stores/useCommentStore";
 
 const CommentInput = () => {
   const { mutate: addComment } = useCreateCommentMutation();
   const { selectedCafe } = useCafeStore();
   const { userData } = useUserStore();
   const inputRef = useRef(null);
+  const { createStoreComment } = useCommentStore();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
     addComment({
+      cafe_id: selectedCafe.id,
+      cafe_name: selectedCafe.place_name,
+      comments: inputRef.current.value,
+      user_uid: userData.id,
+      nickname: userData.user_metadata.nickname
+    });
+    
+    createStoreComment({
       cafe_id: selectedCafe.id,
       cafe_name: selectedCafe.place_name,
       comments: inputRef.current.value,

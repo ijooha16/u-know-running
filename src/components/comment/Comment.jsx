@@ -19,7 +19,15 @@ const Comment = ({ nickname, comment, id, user_uid }) => {
         {userData.user_metadata.sub === user_uid && (
           <div className="flex gap-[6px]">
             <Icon icon="edit" onClick={() => setShowInput(true)} small={true} className="cursor-pointer" />
-            <Icon icon="delete" onClick={() => deleteComment({ id })} small={true} className="cursor-pointer" />
+            <Icon
+              icon="delete"
+              onClick={() => {
+                console.log('onCLick id', id)
+                deleteComment(id);
+              }}
+              small={true}
+              className="cursor-pointer"
+            />
           </div>
         )}
       </div>

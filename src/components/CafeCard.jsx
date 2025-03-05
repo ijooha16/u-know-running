@@ -3,6 +3,7 @@ import { useGetImage } from "../tanstack/queries/useGetImage";
 import { useToggleBookmark } from "../tanstack/mutations/useBookmarksMutation";
 import useUserStore from "../stores/useUserStore";
 import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
 
 const CafeCard = ({ cafe }) => {
   // 받아온걸로 데이터 추출
@@ -16,6 +17,18 @@ const CafeCard = ({ cafe }) => {
   // 네이버 이미지
   const { data: naverImage, isLoading: imageLoading, error: imageError } = useGetImage(place_name);
   const image = naverImage && naverImage[0].thumbnail;
+  const defaultImageUrl = "https://www.thinkfood.co.kr/news/photo/202007/88177_114044_267.jpg"
+
+  const [imageUrl, setImageUrl] = useState(defaultImageUrl);
+
+  useEffect(() => {
+    if (imageError || !image || image === null) {
+      setImageUrl(defaultImageUrl);
+    } else {
+      setImageUrl(image); 
+    }
+  }, [image, imageLoading, imageError]);
+
 
   const handleBookmarkToggle = () => {
     const bookmarkData = {
@@ -52,7 +65,7 @@ const CafeCard = ({ cafe }) => {
 
   return (
       <div className={`shadow h-[450px] w-[300px] flex flex-col items-center gap-[16px] text-white rounded-[20px] overflow-hidden relative`}>
-        <img src={image} className="absolute h-[450px] max-w-fit "/>
+        <img src={imageUrl} className="absolute h-[450px] min-w-fit" />
         <div key={cafe_id} className="z-0 bg-gradient-to-t from-[#000000d7]/60 to-[#0000003e]/0 min-h-[300px] h-full w-full flex flex-col justify-start items-start p-[20px_16px] rounded-[20px]">
           <div className="absolute bottom-10">
             <div className="flex justify-between w-full items-center pr-[12px]">

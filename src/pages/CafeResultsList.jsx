@@ -1,6 +1,5 @@
 import Tag from "../components/common/Tag";
 import { CafeTagTypes } from "../data/CafeTypes";
-import ContentLayout from "../components/layout/ContentLayout";
 import CafeCard from "../components/CafeCard"; // ContentBox 대신 CafeCard를 쓰고 싶은데 지금 api 연결이 안돼서 못하는 중
 import useCafeStore from "../stores/useCafeStore";
 import useGetCafes from "../tanstack/queries/useGetCafes";

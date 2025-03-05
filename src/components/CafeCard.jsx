@@ -3,11 +3,14 @@ import { useGetImage } from "../tanstack/queries/useGetImage";
 import { useToggleBookmark } from "../tanstack/mutations/useBookmarksMutation";
 import useUserStore from "../stores/useUserStore";
 import { toast } from "react-toastify";
+import MainTag from "./common/MainTag";
+import { useGetCafeTopTags } from "../tanstack/queries/useGetCafeTags";
 
 const CafeCard = ({ cafe }) => {
   // 받아온걸로 데이터 추출
   const { cafe_id, place_name, road_address_name, address_name, phone, place_url } = cafe;
   const { userData } = useUserStore();
+  const { data: tagList } = useGetCafeTopTags(cafe_id);
 
   const isBookmarked = true;
 
@@ -56,7 +59,8 @@ const CafeCard = ({ cafe }) => {
         className="bg-gradient-to-t from-[#000000d7] to-[#0000003e] min-h-[300px] h-full w-full flex flex-col justify-start items-start p-[20px_16px] rounded-[20px]"
       >
         <img src={image} className="w-[268px] h-[268px] object-cover" />
-        <div className="flex justify-between w-full items-center pr-[12px]">
+        <div className="flex justify-between w-full items-center pr-[12px] mt-[16px]">
+          <MainTag tagText={tagList[0]?.tag || ""} />
           <Icon
             icon={isBookmarked ? "bookMark" : "bookMark_empty"}
             onClick={handleBookmarkToggle}

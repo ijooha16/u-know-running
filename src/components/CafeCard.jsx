@@ -34,7 +34,7 @@ const CafeCard = ({ cafe }) => {
     toggleBookmark(bookmarkData, {
       onSuccess: () => {
         if (isBookmarked) {
-          toast.success("북마크가 해제되었습니다.");
+          toast.error("북마크가 해제되었습니다.");
         } else {
           toast.success("북마크가 등록되었습니다.");
         }

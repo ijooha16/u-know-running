@@ -22,7 +22,6 @@ const Comment = ({ nickname, comment, id, user_uid }) => {
             <Icon
               icon="delete"
               onClick={() => {
-                console.log('onCLick id', id)
                 deleteComment(id);
               }}
               small={true}

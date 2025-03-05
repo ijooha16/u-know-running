@@ -4,7 +4,7 @@ import { getComments } from "../../services/comments";
 
 export const useGetCommentsQuery = () => {
   return useQuery({
-    queryKey: QUERY_KEYS.COMMENTS,
+    queryKey: [QUERY_KEYS.COMMENTS],
     queryFn: getComments,
   });
 };

@@ -14,7 +14,7 @@ export const useUserInfo = () => {
       const userId = authUser.user.id;
       const { data: userData, error: userError } = await supabase
         .from("users")
-        .select("nickname, mbti, gender, email")
+        .select("nickname, mbti, gender, email, profile_image")
         .eq("users_uid", userId)
         .single();
 

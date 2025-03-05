@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { CafeTagTypes } from "../data/CafeTypes";
 import ContentBox from "../components/common/ContentBox";
 import Input from "../components/common/Input";
@@ -8,6 +8,10 @@ import useUserStore from "../stores/useUserStore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from "../data/toastMessages";
+import profiler from "../assets/images/profiling-80-13ce3.svg";
+import superman from "../assets/images/superman-42.svg";
+import superwoman from "../assets/images/superwoman-95.svg";
+import spotlight from "../assets/images/spotlight-40.svg"
 
 const Splash = () => {
   const { userData } = useUserStore();
@@ -19,7 +23,8 @@ const Splash = () => {
   const [gender, setGender] = useState("");
   const [mbti, setMbti] = useState("");
   const [tags, setTags] = useState([]);
-  const [selected, setSelected] = useState(null); // 성별 선택용 상태
+  const [selected, setSelected] = useState(null); // 성별 선택용 상태; // 선택된 태그들
+  const [clickedTags, setClickedTags] = useState({}); // 개별 태그 클릭 상태
 
   const updateUserInfo = async () => {
     const { error } = await supabase
@@ -60,10 +65,6 @@ const Splash = () => {
     }
   };
 
-  const onTagSelectHandler = (tag) => {
-    setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
-  };
-
   // 성별 체크박스에서 하나만 선택하도록 하는 핸들러
   const handleCheckboxChange = (value) => {
     setSelected(selected === value ? null : value);
@@ -75,52 +76,72 @@ const Splash = () => {
     return mbtiRegex.test(input);
   };
 
+  // 태그 선택 핸들러
+  const handleSelectedTags = (tag) => {
+    setTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  // 태그 클릭 핸들러 (태그별 border 색상 변경)
+  const handleClickTags = (tag) => {
+    setClickedTags((prev) => ({
+      ...prev,
+      [tag]: !prev[tag],
+    }));
+  };
+
   return (
-    <ContentBox>
+    <ContentBox className="min-w-[100vw] h-[90vh] bg-white flex justify-center items-center">
       {page === 0 && (
         <div className="text-center flex flex-col items-center gap-4">
-          <p>
-            더 정확한 추천을 위해,
+          <h1 className="text-[30px] font-black mb-10 text-center absolute top-24 translate-y-24">
+            더 정확한 추천을 위해, {nickname} 님의
             <br />
-            {nickname} 님의
-            <br />
-            성별, MBTI, 선호하는 카페 유형을 <br />
-            알아보겠습니다!
-          </p>
+            성별, MBTI, 선호하는 카페 유형을 알아보겠습니다!
+          </h1>
+          <img src={profiler} alt="프로필을 보는 사람 이미지" className="w-[300px] mt-20"/>
           <Button onClick={nextPage} text="시작하기" />
         </div>
       )}
 
       {page === 1 && (
         <div className="text-center flex flex-col items-center gap-4">
-          <p>{nickname} 님의 성별은 무엇인가요?</p>
+          <h1 className="text-[30px] font-black mb-10 text-center absolute top-24 translate-y-24">
+          {nickname} 님의 성별은 무엇인가요?
+          </h1>
           <div className="flex gap-4">
-            <label className="flex items-center space-x-2 cursor-pointer">
+            <label className="flex flex-col items-center space-x-2 cursor-pointer">
+              <img src={superman} alt="슈퍼맨" className="w-[300px]"/>
               <input
                 type="checkbox"
                 checked={selected === "남성"}
                 onChange={() => handleCheckboxChange("남성")}
                 className="w-5 h-5 accent-blue-900"
               />
-              <span>남성</span>
+              <span className="font-semibold mt-2">남성</span>
             </label>
-            <label className="flex items-center space-x-2 cursor-pointer">
+            <label className="flex flex-col items-center space-x-2 cursor-pointer">
+              <img src={superwoman} alt="슈퍼우먼" className="w-[300px]"/>  
               <input
                 type="checkbox"
                 checked={selected === "여성"}
                 onChange={() => handleCheckboxChange("여성")}
                 className="w-5 h-5 accent-blue-900"
               />
-              <span>여성</span>
+              <span className="font-semibold mt-2">여성</span>
             </label>
           </div>
-          <Button onClick={nextPage} text="다음" />
+          <Button onClick={nextPage} text="다음" className="mt-5"/>
         </div>
       )}
 
       {page === 2 && (
         <div className="text-center flex flex-col items-center gap-4">
-          <p>{nickname} 님의 MBTI는 무엇인가요?</p>
+          <h1 className="text-[30px] font-black text-center absolute top-24 translate-y-24">
+            {nickname} 님의 MBTI는 무엇인가요?
+          </h1>
+          <img src={spotlight} alt="프로필을 보는 사람 이미지" className="w-[300px]"/>
           <Input
             type="text"
             placeholder="MBTI 입력"
@@ -129,7 +150,7 @@ const Splash = () => {
             onChange={(e) => {
               setMbti(e.target.value);
             }}
-            className="text-center border border-gray-300"
+            className="text-center border border-gray-300 mb-2"
           />
           <Button onClick={nextPage} text="다음" />
         </div>
@@ -137,17 +158,24 @@ const Splash = () => {
 
       {page === 3 && (
         <div className="text-center flex flex-col items-center gap-4">
-          <p>{nickname} 님이 선호하는 카페를 골라주세요.</p>
-          <div className="flex flex-col space-y-2">
+          <h1 className="text-[30px] font-black text-center absolute top-24 translate-y-24">
+            {nickname} 님이 선호하는 카페를 골라주세요.
+          </h1>
+          <div className="grid grid-cols-5 gap-[30px] my-5">
             {Object.values(CafeTagTypes).map((type) => (
-              <label key={type} className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={tags.includes(type)}
-                  onChange={() => onTagSelectHandler(type)}
-                  className="w-5 h-5 accent-blue-900"
-                />
-                <span className="text-sm">{type}</span>
+              <label key={type}> 
+                <div className={`border-4 w-[220px] h-[150px] flex justify-center items-center rounded-xl shadow-md hover:cursor-pointer ${clickedTags[type] ? "border-blue-900" : "border-gray-300"}`}>
+                  <input
+                    type="checkbox"
+                    checked={tags.includes(type)}
+                    onChange={() => {
+                      handleSelectedTags(type);
+                      handleClickTags(type);
+                    }}
+                    className="w-5 h-5 accent-blue-900 invisible"
+                  />
+                  <span className="text-sm font-black ml-[-15px]">{type}</span>
+                </div>
               </label>
             ))}
           </div>

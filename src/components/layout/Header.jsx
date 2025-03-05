@@ -21,18 +21,18 @@ const Header = () => {
     <div className="h-[160px] bg-white w-full flex justify-between items-center px-[40px]">
       <div className="w-[220px]"></div>
       <Link to="/">
-        <img src="src/assets/images/해시카페.png" className="w-[100px]" />
+        <img src="src/assets/images/해시카페.png" className="w-[100px] cursor-pointer" />
       </Link>
       <div className="w-[220px] flex gap-[40px]">
-        <Link to={userData ? "/my-page" : "/sign-up"} className="text-darkgray">
+        <Link to={userData ? "/my-page" : "/sign-up"} className="text-darkgray cursor-pointer">
           {userData ? "마이페이지" : "회원가입"}
         </Link>
         {userData ? (
-          <button className="text-darkgray" onClick={onLogoutHandler}>
+          <button className="text-darkgray cursor-pointer" onClick={onLogoutHandler}>
             로그아웃
           </button>
         ) : (
-          <Link to="/log-in" className="text-darkgray">
+          <Link to="/log-in" className="text-darkgray cursor-pointer">
             로그인
           </Link>
         )}
